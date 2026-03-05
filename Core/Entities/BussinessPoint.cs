@@ -12,7 +12,7 @@ namespace Core.Entities
         public string? Name { get; set; }
         public string? Contact_Person { get; set; }
         public string? Email { get; set; }
-        public string? Mobile_Number { get; set; }
+        public string? Mobile_No { get; set; }
         public string? E_Identifier { get; set; }
         public string? Legal_Reg_Identifier { get; set; }
         public string? Legal_Reg_Type { get; set; }
@@ -21,7 +21,7 @@ namespace Core.Entities
         public string? AddressLine1 { get; set; }
         public string? City { get; set; }
         public string? Country_Subdivision { get; set; }
-        public string? Country_Code { get; set; }
+        public string? Country { get; set; }
         public bool Is_Seller { get; set; }
         public bool Is_Customer { get; set; }
     }

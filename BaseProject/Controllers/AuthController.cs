@@ -22,5 +22,12 @@ namespace API.Controllers
             var result = await _service.LoginAsync(dto);
             return Ok(ApiResponse<object>.Ok(result));
         }
+
+        [HttpPost("company")]
+        public async Task<IActionResult> GetCompany(LoginDto dto)
+        {
+            var result = await _service.LoginAsync(dto);
+            return Ok(ApiResponse<object>.Ok(result));
+        }
     }
 }

@@ -20,7 +20,7 @@ namespace Core.DTOs
         public string? AddressLine1 { get; set; }
         public string? City { get; set; }
         public string? Country_Subdivision { get; set; }
-        public string? Country_Code { get; set; }
+        public string? Country { get; set; }
         public bool Is_Seller { get; set; }
         public bool Is_Customer { get; set; }
     }
@@ -40,7 +40,7 @@ namespace Core.DTOs
         public string? AddressLine1 { get; set; }
         public string? City { get; set; }
         public string? Country_Subdivision { get; set; }
-        public string? Country_Code { get; set; }
+        public string? Country{ get; set; }
         public bool Is_Seller { get; set; }
         public bool Is_Customer { get; set; }
     }

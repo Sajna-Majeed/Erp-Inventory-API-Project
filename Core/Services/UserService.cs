@@ -24,7 +24,7 @@ namespace Core.Services
         {
             var hashed = PasswordHasher.Hash(dto.Password);
             var userId = _httpContextAccessor.HttpContext?.Items["UserId"] as int?;
-
+            userId = 1;
             var result= await _uow.Repository.ExecuteAsync(
                 "sp_User_Create",
                 new

@@ -5,7 +5,8 @@ namespace Core.Interfaces
 {
     public interface IInvoiceService
     {
-        Task<IEnumerable<InvoiceHeader>> GetInvoices();
+        Task<string> GenerateInvoiceNumberAsync();
+        Task<IEnumerable<InvoiceDto>> GetInvoices();
         Task<InvoiceHeader> GetInvoiceById(int id);
         Task<int> CreateInvoiceAsync(CreateInvoiceDto dto);
         Task<bool> UpdateInvoiceAsync( UpdateInvoiceDto dto);

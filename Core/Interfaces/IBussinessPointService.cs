@@ -9,6 +9,7 @@ namespace Core.Interfaces
         Task<IEnumerable<BussinessPoint>> GetBussinessPointAsync();
         Task<BussinessPoint> GetBussinessPointByIdAsync(int userId);
         Task UpdateBussinessPointAsync(UpdateBussinessPointDto dto);
+        Task ToggleStatusAsync(int id);
         Task DeleteBussinessPointAsync(int id);
     }
 }

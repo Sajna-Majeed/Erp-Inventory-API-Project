@@ -27,7 +27,8 @@ namespace Core.DTOs
         public decimal? Tax_Cat_Tax_Amt { get; set; }
         public string? Tax_Cat_Code { get; set; }
         public decimal? Tax_Cat_Rate { get; set; }
-
+        public int Bp_Id { get; set; }
+        public string? AddressLine { get; set; }
         public List<CreateInvoiceLineDto> Lines { get; set; } = new();
     }
 
@@ -52,11 +53,21 @@ namespace Core.DTOs
         public decimal? Tax_Cat_Tax_Amt { get; set; }
         public string? Tax_Cat_Code { get; set; }
         public decimal? Tax_Cat_Rate { get; set; }
-
+        public int Bp_Id { get; set; }
+        public string? AddressLine { get; set; }
         public List<CreateInvoiceLineDto> Lines { get; set; } = new();
     }
 
-
+    public class InvoiceDto
+    {
+        public int Invoice_Id { get; set; }
+        public string? Invoice_No { get; set; }
+        public DateTime? Invoice_Date { get; set; }
+        public DateTime? Due_Date { get; set; }
+        public decimal? Total { get; set; }
+        public string? Partner { get; set; }
+        public string? Status { get; set; }
+    }
     public class CreateInvoiceLineDto
     {
         public int Invoice_Id { get; set; }

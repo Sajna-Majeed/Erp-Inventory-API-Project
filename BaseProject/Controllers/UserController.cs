@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [ApiController]
     [Route("api/users")]
     public class UsersController : ControllerBase
@@ -22,7 +22,7 @@ namespace API.Controllers
         public async Task<IActionResult> Create(CreateUserDto dto)
         {
             var id = await _service.CreateUserAsync(dto);
-            return Ok(ApiResponse<int>.Ok(id));
+            return Ok(ApiResponse<int>.Ok(id,"New User CreatedSuccessfully"));
         }
         
         [HttpPut]

@@ -15,10 +15,27 @@ namespace Core.Services
     {
         private readonly IExternalApiService _externalApi;
         private readonly IUnitOfWork _uow;
-        public InvoiceService(IExternalApiService externalApi, IUnitOfWork uow)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public InvoiceService(IExternalApiService externalApi, IUnitOfWork uow, IHttpContextAccessor httpContextAccessor)
         {
             _externalApi = externalApi;
             _uow = uow;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+
+        public async Task<string> GenerateInvoiceNumberAsync()
+        {
+            using var multi = await _uow.Repository.QueryMultipleAsync("sp_Invoice_GetAll");
+            var headers = (await multi.ReadAsync<InvoiceHeader>()).ToList();
+            var lastInvoice =  headers.OrderByDescending(x => x.Invoice_Id)
+                .FirstOrDefault();
+
+            int nextNumber = lastInvoice == null
+                ? 1
+                : int.Parse(lastInvoice.Invoice_No.Split('-').Last()) + 1;
+
+            return $"INV-{DateTime.UtcNow.Year}-{nextNumber:D5}";
         }
 
         public async Task<InvoiceHeader> GetInvoiceById(int id)
@@ -38,28 +55,20 @@ namespace Core.Services
         }
 
 
-
-        public async Task<IEnumerable<InvoiceHeader>> GetInvoices()
+        public async Task<IEnumerable<InvoiceDto>> GetInvoices()
         {
-            using var multi = await _uow.Repository.QueryMultipleAsync("sp_Invoice_GetAll");
-            var headers = (await multi.ReadAsync<InvoiceHeader>()).ToList();
-            var lines = (await multi.ReadAsync<InvoiceLine>()).ToList();
-
-            foreach (var h in headers)
-            {
-                h.Lines = lines.Where(x => x.Invoice_Id == h.Invoice_Id).ToList();
-            }
-
-
-            return headers;
+             return  await _uow.Repository.QueryAsync<InvoiceDto>("sp_Invoice_GetAll");
 
         }
 
         public async Task<int> CreateInvoiceAsync(CreateInvoiceDto dto)
         {
             var parameters = new DynamicParameters();
-
+            var userId = _httpContextAccessor.HttpContext?.Items["UserId"] as int?;
             MapHeaderParameters(parameters, dto);
+
+            parameters.Add("@created_by", userId);
+            parameters.Add("@created_on", DateTime.UtcNow);
 
             // Add TVP
             parameters.Add("@Lines",
@@ -76,12 +85,12 @@ namespace Core.Services
 
         public async Task<bool> UpdateInvoiceAsync( UpdateInvoiceDto dto)
         {
+            var userId = _httpContextAccessor.HttpContext?.Items["UserId"] as int?;
             var parameters = new DynamicParameters();
 
-           
-
             MapHeaderParameters(parameters, dto);
-
+            parameters.Add("@updated_by", userId);
+            parameters.Add("@updated_on", DateTime.UtcNow);
             parameters.Add("@Lines",
                 CreateInvoiceLineDataTable(dto.Lines)
                     .AsTableValuedParameter("dbo.InvoiceLineType"));
@@ -129,6 +138,8 @@ namespace Core.Services
             parameters.Add("@tax_cat_tax_amt", dto.Tax_Cat_Tax_Amt);
             parameters.Add("@tax_cat_code", dto.Tax_Cat_Code);
             parameters.Add("@tax_cat_rate", dto.Tax_Cat_Rate);
+            parameters.Add("@address_line", dto.AddressLine);
+            parameters.Add("@bp_id", dto.Bp_Id);
         }
         private void MapHeaderParameters(DynamicParameters parameters, UpdateInvoiceDto dto)
         {
@@ -151,6 +162,8 @@ namespace Core.Services
             parameters.Add("@tax_cat_tax_amt", dto.Tax_Cat_Tax_Amt);
             parameters.Add("@tax_cat_code", dto.Tax_Cat_Code);
             parameters.Add("@tax_cat_rate", dto.Tax_Cat_Rate);
+            parameters.Add("@address_line", dto.AddressLine);
+            parameters.Add("@bp_id", dto.Bp_Id);
         }
         private DataTable CreateInvoiceLineDataTable(List<CreateInvoiceLineDto> lines)
         {

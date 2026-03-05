@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Core.Entities
 {
-    public class InvoiceHeader
+    public class InvoiceHeader:Base_Entity
     {
         public int Invoice_Id { get; set; }
         public string? Invoice_No { get; set; }
@@ -27,7 +27,8 @@ namespace Core.Entities
         public decimal? Tax_Cat_Tax_Amt { get; set; }
         public string? Tax_Cat_Code { get; set; }
         public decimal? Tax_Cat_Rate { get; set; }
-
+        public int Bp_Id { get; set; }
+        public string? AddressLine { get; set; }
         public List<InvoiceLine> Lines { get; set; } = new();
     }
 

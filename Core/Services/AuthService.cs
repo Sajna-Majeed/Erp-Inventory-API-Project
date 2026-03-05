@@ -44,14 +44,18 @@ namespace Core.Services
                     Expiry = _refresh.Expiry()
                 });
 
-
+            var company=await _uow.Repository.QuerySingleAsync<Company>("sp_Company_GetById", new
+            {
+                id = 1
+            });
             return new
             {   
                 user.Username,
                 user.FullName,
                 user.Role,
                 accessToken,
-                refreshToken
+                refreshToken,
+                company
             };
         }
 

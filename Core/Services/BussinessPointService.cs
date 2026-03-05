@@ -40,7 +40,7 @@ namespace Core.Services
                     dto.AddressLine1,
                     dto.City,
                     dto.Country_Subdivision,
-                    dto.Country_Code,
+                    dto.Country,
                     dto.Is_Customer,
                     dto.Is_Seller,
                     CreatedBy = userId,
@@ -71,7 +71,7 @@ namespace Core.Services
                     dto.AddressLine1,
                     dto.City,
                     dto.Country_Subdivision,
-                    dto.Country_Code,
+                    dto.Country,
                     dto.Is_Customer,
                     dto.Is_Seller,
                     UpdatedBy = userId,
@@ -92,7 +92,17 @@ namespace Core.Services
 
             _uow.Commit();
         }
+        public async Task ToggleStatusAsync(int id)
+        {
+            await _uow.Repository.ExecuteAsync(
+                "sp_BussinessPartner_Toggle",
+                new
+                {
+                    bp_Id = id
+                });
 
+            _uow.Commit();
+        }
 
         public async Task<IEnumerable<BussinessPoint>> GetBussinessPointAsync()
         {

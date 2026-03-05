@@ -16,6 +16,14 @@ namespace API.Controllers
         {
             _service = service;
         }
+        [HttpGet("invoicenumber")]
+        public async Task<IActionResult> GenerateInvoiceNumberAsync()
+        {
+            var result = await _service.GenerateInvoiceNumberAsync();
+            return Ok(ApiResponse<string>.Ok(result));
+        }
+
+
 
         [HttpPost]
         public async Task<IActionResult> CreateInvoice(CreateInvoiceDto dto)

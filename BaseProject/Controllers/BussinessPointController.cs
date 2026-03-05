@@ -10,11 +10,11 @@ namespace API.Controllers
     //[Authorize(Roles = "User")]
     [ApiController]
     [Route("api/[controller]")]
-    public class BussinessPointController : ControllerBase
+    public class BussinessPartnerController : ControllerBase
     {
         private readonly IBussinessPointService _service;
 
-        public BussinessPointController(IBussinessPointService service)
+        public BussinessPartnerController(IBussinessPointService service)
         {
             _service = service;
         }
@@ -30,13 +30,20 @@ namespace API.Controllers
         public async Task<IActionResult> Update(UpdateBussinessPointDto dto)
         {
             await _service.UpdateBussinessPointAsync(dto);
-            return Ok(ApiResponse<string>.Ok("Bussiness Point updated"));
+            return Ok(ApiResponse<string>.Ok("Bussiness Partner updated"));
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             await _service.DeleteBussinessPointAsync(id);
-            return Ok(ApiResponse<string>.Ok("Bussiness Point deleted"));
+            return Ok(ApiResponse<string>.Ok("Bussiness Partner deleted"));
+        }
+      
+        [HttpDelete("Toggle/{id}")]
+        public async Task<IActionResult> Togggle(int id)
+        {
+            await _service.ToggleStatusAsync(id);
+            return Ok(ApiResponse<string>.Ok("Bussiness Partner status updated"));
         }
         [HttpGet]
         public async Task<IActionResult> Get()
