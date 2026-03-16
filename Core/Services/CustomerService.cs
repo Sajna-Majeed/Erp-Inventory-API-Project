@@ -4,88 +4,83 @@ using Core.Interfaces;
 using Core.Security;
 using Dapper;
 using Microsoft.AspNetCore.Http;
+using Serilog;
 using System.Data;
 
 namespace Core.Services
 {
   
 
-    public class BussinessPointService : IBussinessPointService
+    public class CustomerService : ICustomerService
     {
         private readonly IUnitOfWork _uow;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public BussinessPointService(IUnitOfWork uow,IHttpContextAccessor httpContextAccessor)
+        public CustomerService(IUnitOfWork uow,IHttpContextAccessor httpContextAccessor)
         {
             _uow = uow;
             _httpContextAccessor = httpContextAccessor;
         }
         public async Task<string> GenerateCodeAsync()
         {
-            var sql = "SELECT TOP (1)  *  FROM [BussinessPartner] order by bp_id desc";
+            var sql = "SELECT TOP (1)  *  FROM [Customer] order by customer_id desc";
 
-            var lastCode = await _uow.Repository.QuerySingleAsync<BussinessPoint>(sql, null, CommandType.Text);
+            var lastCode = await _uow.Repository.QuerySingleAsync<Customer>(sql, null, CommandType.Text);
 
             int nextNumber = lastCode == null
                 ? 1
                 : int.Parse(lastCode.Code.Split('-').Last()) + 1;
 
-            return $"BP-{nextNumber:D3}";
+            return $"C-{nextNumber:D3}";
         }
 
-        public async Task<int> CreateBussinessPointAsync(CreateBussinessPointDto dto)
+        public async Task<int> CreateCustomerAsync(CreateCustomerDto dto)
         {
            var userId = _httpContextAccessor.HttpContext?.Items["UserId"] as int?;
         
             var result= await _uow.Repository.ExecuteAsync(
-                "sp_BussinessPartner_Insert",
+                "sp_Customer_Insert",
                 new
                 {
+                    dto.Code,
+                    dto.Customer_Type_Id,
                     dto.Name,
+                    dto.Description,
                     dto.Contact_Person,
                     dto.Email,
                     dto.Mobile_Number,
-                    dto.E_Identifier,
-                    dto.Legal_Reg_Identifier,
-                    dto.Legal_Reg_Type,
-                    dto.Tax_Identifier,
-                    dto.Tax_Scheme_Code,
                     dto.AddressLine1,
                     dto.City,
                     dto.Country_Subdivision,
                     dto.Country,
-                    dto.Is_Customer,
-                    dto.Is_Seller,
+                    dto.Zip_code,
                     CreatedBy = userId,
                     CreatedOn=DateTime.UtcNow
                 });
-            _uow.Commit();  
-
+            _uow.Commit();
+            Log.Information("User {User} created product {ProductId}", userId, 7);
             return result;
         }
-        public async Task UpdateBussinessPointAsync(UpdateBussinessPointDto dto)
+        public async Task UpdateCustomerAsync(UpdateCustomerDto dto)
         {
             var userId = _httpContextAccessor.HttpContext?.Items["UserId"] as int?;
 
             await _uow.Repository.ExecuteAsync(
-                "sp_BussinessPartner_Update",
+                "sp_Customer_Update",
                 new
                 {
-                    dto.Bp_Id,
+                    dto.Customer_Id,
+                    dto.Code,
+                    dto.Customer_Type_Id,
                     dto.Name,
+                    dto.Description,
                     dto.Contact_Person,
                     dto.Email,
                     dto.Mobile_Number,
-                    dto.E_Identifier,
-                    dto.Legal_Reg_Identifier,
-                    dto.Legal_Reg_Type,
-                    dto.Tax_Identifier,
-                    dto.Tax_Scheme_Code,
                     dto.AddressLine1,
                     dto.City,
                     dto.Country_Subdivision,
                     dto.Country,
-                    dto.Is_Customer,
-                    dto.Is_Seller,
+                    dto.Zip_code,
                     UpdatedBy = userId,
                     UpdatedOn = DateTime.UtcNow
                 });
@@ -93,13 +88,13 @@ namespace Core.Services
             _uow.Commit();
         }
 
-        public async Task DeleteBussinessPointAsync(int id)
+        public async Task DeleteCustomerAsync(int id)
         {
             await _uow.Repository.ExecuteAsync(
-                "sp_BussinessPartner_Delete",
+                "sp_Customer_Delete",
                 new
                 {
-                    bp_Id = id
+                    customer_id = id
                 });
 
             _uow.Commit();
@@ -107,25 +102,25 @@ namespace Core.Services
         public async Task ToggleStatusAsync(int id)
         {
             await _uow.Repository.ExecuteAsync(
-                "sp_BussinessPartner_Toggle",
+                "sp_Customer_Toggle",
                 new
                 {
-                    bp_Id = id
+                    customer_id = id
                 });
 
             _uow.Commit();
         }
 
-        public async Task<IEnumerable<BussinessPoint>> GetBussinessPointAsync()
+        public async Task<IEnumerable<Customer>> GetCustomerAsync()
         {
-            return await _uow.Repository.QueryAsync<BussinessPoint>(
-                "sp_BussinessPartner_GetAll");
+            return await _uow.Repository.QueryAsync<Customer>(
+                "sp_Customer_GetAll");
         }
-        public async Task<BussinessPoint> GetBussinessPointByIdAsync(int bpId)
+        public async Task<Customer> GetCustomerByIdAsync(int Id)
         {
-            return await _uow.Repository.QuerySingleAsync<BussinessPoint>("sp_BussinessPartner_GetById", new
+            return await _uow.Repository.QuerySingleAsync<Customer>("sp_Customer_GetById", new
             {
-                bp_Id = bpId
+                customer_id = Id
             });
         }
     }

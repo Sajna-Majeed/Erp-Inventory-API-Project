@@ -6,47 +6,37 @@ using System.Threading.Tasks;
 
 namespace Core.DTOs
 {
-    public class CreateBussinessPointDto
+    public class CreateCustomerDto
     {
         public string? Code { get; set; }
-        public int Cutomer_Type_Id { get; set; }
+        public int Customer_Type_Id { get; set; }
         public string? Name { get; set; }
+        public string? Description { get; set; }
         public string? Contact_Person { get; set; }
         public string? Email { get; set; }
         public string? Mobile_Number { get; set; }
-        public string? E_Identifier { get; set; }
-        public string? Legal_Reg_Identifier { get; set; }
-        public string? Legal_Reg_Type { get; set; }
-        public string? Tax_Identifier { get; set; }
-        public string? Tax_Scheme_Code { get; set; }
         public string? AddressLine1 { get; set; }
         public string? City { get; set; }
         public string? Country_Subdivision { get; set; }
         public string? Country { get; set; }
-        public bool Is_Seller { get; set; }
-        public bool Is_Customer { get; set; }
+        public string? Zip_code { get; set; }
     }
 
-    public class UpdateBussinessPointDto
+    public class UpdateCustomerDto
     {
-        public int Bp_Id { get; set; }
+        public int Customer_Id { get; set; }
         public string? Code { get; set; }
-        public int Cutomer_Type_Id { get; set; }
+        public int Customer_Type_Id { get; set; }
         public string? Name { get; set; }
+        public string? Description { get; set; }
         public string? Contact_Person { get; set; }
         public string? Email { get; set; }
         public string? Mobile_Number { get; set; }
-        public string? E_Identifier { get; set; }
-        public string? Legal_Reg_Identifier { get; set; }
-        public string? Legal_Reg_Type { get; set; }
-        public string? Tax_Identifier { get; set; }
-        public string? Tax_Scheme_Code { get; set; }
         public string? AddressLine1 { get; set; }
         public string? City { get; set; }
         public string? Country_Subdivision { get; set; }
         public string? Country{ get; set; }
-        public bool Is_Seller { get; set; }
-        public bool Is_Customer { get; set; }
+        public string? Zip_code { get; set; }
     }
 
 }

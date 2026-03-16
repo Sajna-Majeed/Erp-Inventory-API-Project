@@ -5,6 +5,7 @@ namespace Core.Interfaces
 {
     public interface IBussinessPointService
     {
+        Task<string> GenerateCodeAsync();
         Task<int> CreateBussinessPointAsync(CreateBussinessPointDto dto);
         Task<IEnumerable<BussinessPoint>> GetBussinessPointAsync();
         Task<BussinessPoint> GetBussinessPointByIdAsync(int userId);

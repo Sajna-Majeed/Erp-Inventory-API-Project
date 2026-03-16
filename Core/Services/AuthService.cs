@@ -48,6 +48,30 @@ namespace Core.Services
             {
                 id = 1
             });
+
+
+            var menu = await _uow.Repository.QueryAsync<Menu>("sp_Company_Menu", new
+            {
+                id = 1
+            });
+
+            var menulist=new List<MenuList>();
+            var parentMenus = menu.Where(m => m.Parent_Id == null).OrderBy(m => m.Display_Order);
+            foreach (var item in parentMenus)
+            {
+                var childres = menu.Where(m => m.Parent_Id == item.Menu_Id).OrderBy(m => m.Display_Order);
+                menulist.Add(new MenuList
+                {
+                    Name = item.Name,
+                    DisplayOrder = item.Display_Order,
+                    MenuItems = childres.Select(c => new MenuItem
+                    {
+                        Name = c.Name,
+                        DisplayOrder = c.Display_Order
+                    }).ToList()
+                });
+            }
+
             return new
             {   
                 user.Username,
@@ -55,7 +79,8 @@ namespace Core.Services
                 user.Role,
                 accessToken,
                 refreshToken,
-                company
+                company,
+                menulist
             };
         }
 

@@ -8,18 +8,36 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using Serilog.Sinks.MSSqlServer;
+using System.Configuration;
 using System.Text;
+
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // ----------------------
 // SERILOG CONFIG
 // ----------------------
+//Log.Logger = new LoggerConfiguration()
+//    .ReadFrom.Configuration(builder.Configuration)
+//    .Enrich.FromLogContext()
+//    .CreateLogger();
 Log.Logger = new LoggerConfiguration()
-    .ReadFrom.Configuration(builder.Configuration)
     .Enrich.FromLogContext()
+    .Enrich.WithMachineName()
+    .Enrich.WithThreadId()
+    .WriteTo.Console()
+    .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
+    .WriteTo.MSSqlServer(
+        connectionString: builder.Configuration.GetConnectionString("DefaultConnection"),
+        sinkOptions: new MSSqlServerSinkOptions
+        {
+            TableName = "Logs",
+            AutoCreateSqlTable = false
+        })
     .CreateLogger();
-
 builder.Host.UseSerilog();
 // --------------------
 // Add services
@@ -129,9 +147,11 @@ app.UseMiddleware<ExceptionMiddleware>();
 // Audit middleware AFTER exception
 app.UseCors("DefaultCors");
 
+app.UseMiddleware<CorrelationIdMiddleware>();
+app.UseMiddleware<RequestLoggingMiddleware>();
+app.UseSerilogRequestLogging();
 app.UseAuthentication();
 app.UseMiddleware<AuditMiddleware>();
-
 app.UseAuthorization();
 
 app.MapControllers();
