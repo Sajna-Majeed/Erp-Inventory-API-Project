@@ -13,12 +13,10 @@ namespace Core.Services
 
     public class InvoiceService : IInvoiceService
     {
-        private readonly IExternalApiService _externalApi;
         private readonly IUnitOfWork _uow;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public InvoiceService(IExternalApiService externalApi, IUnitOfWork uow, IHttpContextAccessor httpContextAccessor)
+        public InvoiceService( IUnitOfWork uow, IHttpContextAccessor httpContextAccessor)
         {
-            _externalApi = externalApi;
             _uow = uow;
             _httpContextAccessor = httpContextAccessor;
         }
@@ -205,36 +203,7 @@ namespace Core.Services
 
         #endregion
 
-        #region Mock External API Calls
-        public async Task<object?> GetInvoiceTraking()
-        {
-            var url = "FakeInvoice";
-            var result = await _externalApi.GetAsync<object>(url);
-
-            if (!result.Success)
-                return result.ErrorMessage ?? "External API failed";
-
-            return result;
-        }
-
-        public async Task<string> SetInvoiceTraking()
-        {
-            var payload = new
-            {
-                name = "test"
-            };
-
-            var response = await _externalApi.PostAsync<object>(
-                "v1/some-endpoint",   // relative URL
-                payload);
-
-            if (!response.Success)
-                return response.ErrorMessage ?? "External API POST failed";
-
-            return "Success";
-        }
-
-        #endregion
+      
 
     }
 

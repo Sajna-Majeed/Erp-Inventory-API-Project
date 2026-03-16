@@ -4,6 +4,7 @@ using Core.Interfaces;
 using Core.Security;
 using Dapper;
 using Microsoft.AspNetCore.Http;
+using Serilog;
 using System.Data;
 
 namespace Core.Services
@@ -48,8 +49,9 @@ namespace Core.Services
                     CreatedBy = userId,
                     CreatedOn=DateTime.UtcNow
                 });
-            _uow.Commit();  
-
+            _uow.Commit();
+            var user = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+            Log.Information("User {User} created a new custom product price with id {Id}", user, result);
             return result;
         }
         public async Task UpdateCustomPriceAsync(UpdateCustomPriceDto dto)
@@ -72,6 +74,8 @@ namespace Core.Services
                 });
 
             _uow.Commit();
+            var user = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+            Log.Information("User {User} updated a custom product price with id {Id}", user, dto.Custom_Prod_Id);
         }
 
         public async Task DeleteCustomPriceAsync(int id)
@@ -84,6 +88,8 @@ namespace Core.Services
                 });
 
             _uow.Commit();
+            var user = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+            Log.Information("User {User} deleted a custom product price  with id {Id}", user, id);
         }
         public async Task ToggleStatusAsync(int id)
         {
@@ -95,6 +101,8 @@ namespace Core.Services
                 });
 
             _uow.Commit();
+            var user = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+            Log.Information("User {User} updated a custom product price status with id {Id}", user, id);
         }
 
         public async Task<IEnumerable<CustomPriceDto>> GetCustomPriceAsync()

@@ -11,7 +11,5 @@ namespace Core.Interfaces
         Task<int> CreateInvoiceAsync(CreateInvoiceDto dto);
         Task<bool> UpdateInvoiceAsync( UpdateInvoiceDto dto);
         Task DeleteInvoiceAsync(int id);
-
-        Task<object> GetInvoiceTraking();
     }
 }

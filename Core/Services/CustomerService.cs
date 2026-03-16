@@ -6,6 +6,7 @@ using Dapper;
 using Microsoft.AspNetCore.Http;
 using Serilog;
 using System.Data;
+using static System.Net.WebRequestMethods;
 
 namespace Core.Services
 {
@@ -36,7 +37,7 @@ namespace Core.Services
         public async Task<int> CreateCustomerAsync(CreateCustomerDto dto)
         {
            var userId = _httpContextAccessor.HttpContext?.Items["UserId"] as int?;
-        
+           
             var result= await _uow.Repository.ExecuteAsync(
                 "sp_Customer_Insert",
                 new
@@ -57,7 +58,8 @@ namespace Core.Services
                     CreatedOn=DateTime.UtcNow
                 });
             _uow.Commit();
-            Log.Information("User {User} created product {ProductId}", userId, 7);
+            var user = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+            Log.Information("User {User} created a new customer with id {Id}", user, result);
             return result;
         }
         public async Task UpdateCustomerAsync(UpdateCustomerDto dto)
@@ -86,6 +88,8 @@ namespace Core.Services
                 });
 
             _uow.Commit();
+            var user = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+            Log.Information("User {User} updated a customer with id {Id}", user, dto.Customer_Id);
         }
 
         public async Task DeleteCustomerAsync(int id)
@@ -98,6 +102,8 @@ namespace Core.Services
                 });
 
             _uow.Commit();
+            var user = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+            Log.Information("User {User} deleted a customer with id {Id}", user, id);
         }
         public async Task ToggleStatusAsync(int id)
         {
@@ -109,6 +115,8 @@ namespace Core.Services
                 });
 
             _uow.Commit();
+            var user = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+            Log.Information("User {User} updated a customer status with id {Id}", user,id);
         }
 
         public async Task<IEnumerable<Customer>> GetCustomerAsync()

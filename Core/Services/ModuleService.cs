@@ -4,6 +4,7 @@ using Core.Interfaces;
 using Core.Security;
 using Dapper;
 using Microsoft.AspNetCore.Http;
+using Serilog;
 using System.Data;
 
 namespace Core.Services
@@ -64,8 +65,9 @@ namespace Core.Services
                     CreatedBy = userId,
                     CreatedOn=DateTime.UtcNow
                 });
-            _uow.Commit();  
-
+            _uow.Commit();
+            var user = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+            Log.Information("User {User} created a new module with id {Id}", user, result);
             return result;
         }
         public async Task UpdateModuleAsync(UpdateModuleDto dto)
@@ -76,7 +78,7 @@ namespace Core.Services
                 "sp_Module_Update",
                 new
                 {
-                    dto.St_Id,
+                    dto.Module_Id,
                     dto.Code,
                     dto.Name,
                     dto.Description,
@@ -86,6 +88,8 @@ namespace Core.Services
                 });
 
             _uow.Commit();
+            var user = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+            Log.Information("User {User} updated a module with id {Id}", user, dto.Module_Id);
         }
 
         public async Task DeleteModuleAsync(int id)
@@ -98,6 +102,8 @@ namespace Core.Services
                 });
 
             _uow.Commit();
+            var user = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+            Log.Information("User {User} deleted a module with id {Id}", user, id);
         }
         public async Task ToggleStatusAsync(int id)
         {
@@ -109,6 +115,8 @@ namespace Core.Services
                 });
 
             _uow.Commit();
+            var user = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+            Log.Information("User {User} updated a module status with id {Id}", user, id);
         }
 
         public async Task<IEnumerable<Module>> GetModuleAsync()

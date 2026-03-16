@@ -1,14 +1,14 @@
-﻿namespace API.Middlewares
+﻿using Serilog;
+
+namespace API.Middlewares
 {
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger<ExceptionMiddleware> _logger;
 
-        public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
+        public ExceptionMiddleware(RequestDelegate next)
         {
             _next = next;
-            _logger = logger;
         }
 
 
@@ -20,7 +20,7 @@
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unhandled exception occurred");
+                Log.Error(ex, "Unhandled exception occurred");
 
                 ctx.Response.StatusCode = 500;
                 await ctx.Response.WriteAsJsonAsync(new

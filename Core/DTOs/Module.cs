@@ -18,7 +18,7 @@ namespace Core.DTOs
     public class UpdateModuleDto
     {
         [Required]
-        public int St_Id { get; set; }
+        public int Module_Id { get; set; }
         [Required]
         public string Code { get; set; } = string.Empty;
         [Required]

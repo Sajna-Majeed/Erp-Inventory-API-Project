@@ -3,6 +3,7 @@ using Core.Entities;
 using Core.Interfaces;
 using Core.Security;
 using Microsoft.AspNetCore.Http;
+using Serilog;
 using System.Data;
 using static System.Net.WebRequestMethods;
 
@@ -38,8 +39,9 @@ namespace Core.Services
                     CreatedBy = userId,
                     CreatedOn=DateTime.UtcNow
                 });
-            _uow.Commit();  
-
+            _uow.Commit();
+            var user = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+            Log.Information("User {User} created a new user with id {Id}", user, result);
             return result;
         }
         public async Task UpdateUserAsync(UpdateUserDto dto)
@@ -61,6 +63,8 @@ namespace Core.Services
                 });
 
             _uow.Commit();
+            var user = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+            Log.Information("User {User} updated a user with id {Id}", user, dto.Id);
         }
 
         public async Task DeleteUserAsync(int id)
@@ -73,6 +77,8 @@ namespace Core.Services
                 });
 
             _uow.Commit();
+            var user = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+            Log.Information("User {User} deleted a user with id {Id}", user, id);
         }
 
 

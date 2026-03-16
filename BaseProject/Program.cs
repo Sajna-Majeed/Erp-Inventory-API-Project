@@ -1,6 +1,5 @@
 using API.Middlewares;
 using Core.Interfaces;
-using Core.Services.ExternalServices;
 using Core.Shared;
 using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -24,19 +23,60 @@ var builder = WebApplication.CreateBuilder(args);
 //    .ReadFrom.Configuration(builder.Configuration)
 //    .Enrich.FromLogContext()
 //    .CreateLogger();
+
+
+//Log.Logger = new LoggerConfiguration()
+//    .Enrich.FromLogContext()
+//    .Enrich.WithMachineName()
+//    .Enrich.WithThreadId()
+//    .WriteTo.Console()
+//    .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
+//    .WriteTo.MSSqlServer(
+//        connectionString: builder.Configuration.GetConnectionString("DefaultConnection"),
+//        sinkOptions: new MSSqlServerSinkOptions
+//        {
+//            TableName = "Logs",
+//            AutoCreateSqlTable = false
+//        })
+//    .CreateLogger();
+
+//Log.Logger = new LoggerConfiguration()
+//    .WriteTo.Console()
+//    .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
+//    .WriteTo.MSSqlServer(
+//        connectionString: builder.Configuration.GetConnectionString("DefaultConnection"),
+//        sinkOptions: new MSSqlServerSinkOptions
+//        {
+//            TableName = "AuditLogs",
+//            AutoCreateSqlTable = false
+//        },
+//        restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Error) 
+//      .CreateLogger();
+
 Log.Logger = new LoggerConfiguration()
-    .Enrich.FromLogContext()
-    .Enrich.WithMachineName()
-    .Enrich.WithThreadId()
     .WriteTo.Console()
     .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
+
+    // Info + Warning logs
     .WriteTo.MSSqlServer(
         connectionString: builder.Configuration.GetConnectionString("DefaultConnection"),
         sinkOptions: new MSSqlServerSinkOptions
         {
-            TableName = "Logs",
+            TableName = "AppLogs",
             AutoCreateSqlTable = false
-        })
+        },
+        restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information)
+
+    // Error logs
+    .WriteTo.MSSqlServer(
+        connectionString: builder.Configuration.GetConnectionString("DefaultConnection"),
+        sinkOptions: new MSSqlServerSinkOptions
+        {
+            TableName = "ErrorLogs",
+            AutoCreateSqlTable = false
+        },
+        restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Error)
+
     .CreateLogger();
 builder.Host.UseSerilog();
 // --------------------
@@ -93,11 +133,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 // HttpContext (needed for audit, user info)
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddHttpClient<IExternalApiService, ExternalApiService>(client =>
-{
-    client.Timeout = TimeSpan.FromSeconds(30);
-    client.BaseAddress = new Uri(builder.Configuration["ExternalApi:TestUrl"]);
-});
 // Register ALL infra + core services
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddCors(options =>

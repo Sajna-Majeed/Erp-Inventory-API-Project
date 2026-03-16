@@ -4,6 +4,7 @@ using Core.Interfaces;
 using Core.Security;
 using Dapper;
 using Microsoft.AspNetCore.Http;
+using Serilog;
 using System.Data;
 
 namespace Core.Services
@@ -63,8 +64,9 @@ namespace Core.Services
                     CreatedBy = userId,
                     CreatedOn=DateTime.UtcNow
                 });
-            _uow.Commit();  
-
+            _uow.Commit();
+            var user = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+            Log.Information("User {User} created a new service type with id {Id}", user, result);
             return result;
         }
         public async Task UpdateServiceTypeAsync(UpdateServiceTypeDto dto)
@@ -84,6 +86,8 @@ namespace Core.Services
                 });
 
             _uow.Commit();
+            var user = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+            Log.Information("User {User} updated a service type with id {Id}", user, dto.St_Id);
         }
 
         public async Task DeleteServiceTypeAsync(int id)
@@ -96,6 +100,8 @@ namespace Core.Services
                 });
 
             _uow.Commit();
+            var user = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+            Log.Information("User {User} deleted a service type with id {Id}", user, id);
         }
 
         public async Task ToggleStatusAsync(int id)
@@ -108,6 +114,8 @@ namespace Core.Services
                 });
 
             _uow.Commit();
+            var user = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+            Log.Information("User {User} updated a service type status with id {Id}", user, id);
         }
         public async Task<IEnumerable<ServiceType>> GetServiceTypeAsync()
         {

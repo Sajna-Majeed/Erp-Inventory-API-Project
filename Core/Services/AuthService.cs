@@ -2,6 +2,7 @@
 using Core.Entities;
 using Core.Interfaces;
 using Core.Security;
+using Serilog;
 using System.Data;
 
 namespace Core.Services
@@ -71,7 +72,7 @@ namespace Core.Services
                     }).ToList()
                 });
             }
-
+            Log.Information("User {User} is logged in", user.Username);
             return new
             {   
                 user.Username,
