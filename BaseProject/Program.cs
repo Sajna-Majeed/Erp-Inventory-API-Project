@@ -178,7 +178,7 @@ app.UseHttpsRedirection();
 
 // Global exception FIRST
 app.UseMiddleware<ExceptionMiddleware>();
-
+app.UseStaticFiles();
 // Audit middleware AFTER exception
 app.UseCors("DefaultCors");
 

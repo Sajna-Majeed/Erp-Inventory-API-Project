@@ -124,6 +124,14 @@ namespace Core.Services
             return await _uow.Repository.QueryAsync<Module>(
                 "sp_Module_GetAll");
         }
+
+        public async Task<IEnumerable<Module>> GetModuleByProductId(int id)
+        {
+            return await _uow.Repository.QueryAsync<Module>("sp_Module_GetByProductId", new
+            {
+               pd_id = id
+            });
+        }
         public async Task<Module> GetModuleByIdAsync(int id)
         {
             return await _uow.Repository.QuerySingleAsync<Module>("sp_Module_GetById", new

@@ -9,6 +9,7 @@ namespace Core.Interfaces
         Task<string> GenerateModuleCodeAsync();
         Task<int> CreateModuleAsync(CreateModuleDto dto);
         Task<IEnumerable<Module>> GetModuleAsync();
+        Task<IEnumerable<Module>> GetModuleByProductId(int id);
         Task<Module> GetModuleByIdAsync(int userId);
         Task UpdateModuleAsync(UpdateModuleDto dto);
         Task DeleteModuleAsync(int id);

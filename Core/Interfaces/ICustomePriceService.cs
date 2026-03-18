@@ -12,5 +12,6 @@ namespace Core.Interfaces
         Task UpdateCustomPriceAsync(UpdateCustomPriceDto dto);
         Task ToggleStatusAsync(int id);
         Task DeleteCustomPriceAsync(int id);
+        Task<IEnumerable<CustomPriceDto>> GetProductPriceByCustomer(int pd_id, int customer_id, int st_id, int module_id);
     }
 }

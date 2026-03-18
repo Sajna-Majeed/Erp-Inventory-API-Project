@@ -62,6 +62,12 @@ namespace API.Controllers
             var users = await _service.GetCustomPriceByIdAsync(id);
             return Ok(ApiResponse<object>.Ok(users));
         }
+        [HttpGet("filtered")]
+        public async Task<IActionResult> GetProductPriceByCustomer(int pd_id,int customer_id,int st_id,int module_id)
+        {
+            var Module = await _service.GetProductPriceByCustomer(pd_id, customer_id,st_id,module_id);
+            return Ok(ApiResponse<object>.Ok(Module));
+        }
     }
 
 }

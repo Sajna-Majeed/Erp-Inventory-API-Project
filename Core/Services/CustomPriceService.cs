@@ -117,6 +117,15 @@ namespace Core.Services
                  Id
             });
         }
+
+        public async Task<IEnumerable<CustomPriceDto>> GetProductPriceByCustomer(int pd_id,int customer_id,int st_id,int module_id)
+        {
+            return await _uow.Repository.QueryAsync<CustomPriceDto>(
+                "sp_Custom_Price_Filtered", new
+                {
+                    pd_id, customer_id,st_id,module_id
+                });
+        }
     }
 
 }

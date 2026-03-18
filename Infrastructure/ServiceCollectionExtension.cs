@@ -41,7 +41,7 @@ namespace Infrastructure
             // --------------------
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IInvoiceService, InvoiceService>();
+            services.AddScoped<IQuoteService, QuoteService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IServiceTypeService, ServiceTypeService>();
             services.AddScoped<IModuleService, ModuleService>();

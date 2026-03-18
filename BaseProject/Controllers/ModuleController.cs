@@ -51,7 +51,12 @@ namespace API.Controllers
             var Module = await _service.GetModuleAsync();
             return Ok(ApiResponse<object>.Ok(Module));
         }
-
+        [HttpGet("product/{id}")]
+        public async Task<IActionResult> GetModuleByProductId(int id)
+        {
+            var Module = await _service.GetModuleByProductId(id);
+            return Ok(ApiResponse<object>.Ok(Module));
+        }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetModuleById(int id)
         {
