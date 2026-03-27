@@ -49,6 +49,7 @@ namespace Infrastructure
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<ICustomPriceService, CustomPriceService>();
             services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<ILicenseTypeService, LicenseTypeService>();
 
 
             return services;

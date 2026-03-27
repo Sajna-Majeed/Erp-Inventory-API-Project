@@ -26,7 +26,7 @@ namespace Core.Services
 
         public async Task<string> GenerateProductCodeAsync()
         {
-            var sql = "SELECT TOP (1)  *  FROM [Product] order by prod_id desc";
+            var sql = "SELECT TOP (1)  *  FROM [Product] order by pd_id desc";
             
             var lastCode = await _uow.Repository.QuerySingleAsync<Product>(sql,null,CommandType.Text);
             
@@ -39,7 +39,7 @@ namespace Core.Services
 
         public async Task<bool> CheckNameExists(string name,int id)
         {
-            var sql = "SELECT  *  FROM [Product] where name=@name and prod_id!=@id and is_deleted=0";
+            var sql = "SELECT  *  FROM [Product] where name=@name and pd_id!=@id and is_deleted=0";
 
             var lastCode = await _uow.Repository.QuerySingleAsync<Product>(sql, new
             {
@@ -61,9 +61,8 @@ namespace Core.Services
                     dto.Code,
                     dto.Name,
                     dto.Description,
-                    dto.Uom_Id,
+                    dto.St_Id,
                     dto.Unit_Price,
-                    dto.Tax_Rate,
                     CreatedBy = userId,
                     CreatedOn=DateTime.UtcNow
                 });
@@ -80,20 +79,19 @@ namespace Core.Services
                 "sp_Product_Update",
                 new
                 {
-                    dto.Prod_Id,
+                    dto.Pd_Id,
                     dto.Code,
                     dto.Name,
                     dto.Description,
-                    dto.Uom_Id,
+                    dto.St_Id,
                     dto.Unit_Price,
-                    dto.Tax_Rate,
                     UpdatedBy = userId,
                     UpdatedOn = DateTime.UtcNow
                 });
 
             _uow.Commit();
             var user = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
-            Log.Information("User {User} updated a product with id {Id}", user, dto.Prod_Id);
+            Log.Information("User {User} updated a product with id {Id}", user, dto.Pd_Id);
         }
 
         public async Task DeleteProductAsync(int id)
