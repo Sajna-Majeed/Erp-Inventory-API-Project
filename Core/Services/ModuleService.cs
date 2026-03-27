@@ -24,7 +24,7 @@ namespace Core.Services
 
         public async Task<bool> CheckNameExists(string name, int id)
         {
-            var sql = "SELECT  *  FROM [Module] where name=@name and module_id!=@id";
+            var sql = "SELECT  *  FROM [Module] where name=@name and module_id!=@id  and is_deleted=0";
 
             var lastCode = await _uow.Repository.QuerySingleAsync<Module>(sql, new
             {
@@ -62,7 +62,7 @@ namespace Core.Services
                     dto.Name,
                     dto.Description,
                     dto.Product_Id,
-                    CreatedBy = userId,
+                    CreatedBy = userId??1,
                     CreatedOn=DateTime.UtcNow
                 });
             _uow.Commit();
@@ -83,7 +83,7 @@ namespace Core.Services
                     dto.Name,
                     dto.Description,
                     dto.Product_Id,
-                    UpdatedBy = userId,
+                    UpdatedBy = userId??1,
                     UpdatedOn = DateTime.UtcNow
                 });
 

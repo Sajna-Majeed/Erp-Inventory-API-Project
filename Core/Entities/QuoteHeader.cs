@@ -22,6 +22,16 @@ namespace Core.Entities
         public bool Invoiced { get; set; }
         public bool Payment_Received { get; set; }
         public List<QuoteLine> Lines { get; set; } = new();
-    }
 
+        public List<FileAttchments> Attchments { get; set; } = new();
+    }
+    public class FileAttchments
+    {
+        public int Id { get; set; }
+        public int Q_File_Id { get; set; }
+        public int Q_Id { get; set; }
+        public string Original_Name { get; set; } = string.Empty;
+        public string File_Name { get; set; } = string.Empty;
+        public string File_Path { get; set; } = string.Empty;
+    }
 }

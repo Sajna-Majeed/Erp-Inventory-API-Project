@@ -43,11 +43,17 @@ namespace API.Controllers
             var users = await _service.GetUsersAsync();
             return Ok(ApiResponse<object>.Ok(users));
         }
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        [HttpDelete("Toggle/{id}")]
+        public async Task<IActionResult> Togggle(int id)
         {
-            var users = await _service.GetUsersByIdAsync(id);
-            return Ok(ApiResponse<object>.Ok(users));
+            await _service.ToggleStatusAsync(id);
+            return Ok(ApiResponse<string>.Ok("User status updated"));
+        }
+        [HttpGet("Check")]
+        public async Task<IActionResult> CheckName(string name, int id)
+        {
+            var product = await _service.CheckNameExists(name, id);
+            return Ok(ApiResponse<object>.Ok(product));
         }
     }
 

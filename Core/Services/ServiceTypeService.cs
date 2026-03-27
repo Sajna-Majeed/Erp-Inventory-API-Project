@@ -25,7 +25,7 @@ namespace Core.Services
 
         public async Task<bool> CheckNameExists(string name, int id)
         {
-            var sql = "SELECT  *  FROM [Service_Type] where name=@name and st_id!=@id";
+            var sql = "SELECT  *  FROM [Service_Type] where name=@name and st_id!=@id and is_deleted=0";
 
             var lastCode = await _uow.Repository.QuerySingleAsync<ServiceType>(sql, new
             {

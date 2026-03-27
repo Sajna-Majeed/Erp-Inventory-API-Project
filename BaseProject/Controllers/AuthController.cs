@@ -23,11 +23,17 @@ namespace API.Controllers
             return Ok(ApiResponse<object>.Ok(result));
         }
 
-        [HttpPost("company")]
-        public async Task<IActionResult> GetCompany(LoginDto dto)
+        [HttpPut("profile")]
+        public async Task<IActionResult> UpdateProfile(UserProfile dto)
         {
-            var result = await _service.LoginAsync(dto);
-            return Ok(ApiResponse<object>.Ok(result));
+            await _service.UpdateUserProfile(dto);
+            return Ok(ApiResponse<object>.Ok("Profile Updated"));
+        }
+        [HttpPut("password")]
+        public async Task<IActionResult> UpdatePassword(PassWordChange dto)
+        {
+            await _service.UpdatePassword(dto);
+            return Ok(ApiResponse<object>.Ok("Password Updated"));
         }
     }
 }

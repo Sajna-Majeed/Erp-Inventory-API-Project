@@ -37,7 +37,10 @@ namespace Core.Services
         public async Task<int> CreateCustomerAsync(CreateCustomerDto dto)
         {
            var userId = _httpContextAccessor.HttpContext?.Items["UserId"] as int?;
-           
+            if (userId == null)
+            {
+                throw new UnauthorizedAccessException("User not authenticated");
+            }
             var result= await _uow.Repository.ExecuteAsync(
                 "sp_Customer_Insert",
                 new

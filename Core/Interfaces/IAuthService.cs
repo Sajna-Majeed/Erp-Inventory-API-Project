@@ -10,5 +10,7 @@ namespace Core.Interfaces
     public interface IAuthService
     {
         Task<object> LoginAsync(LoginDto dto);
+        Task UpdatePassword(PassWordChange dto);
+        Task UpdateUserProfile(UserProfile dto);
     }
 }

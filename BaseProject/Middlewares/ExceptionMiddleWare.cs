@@ -18,6 +18,14 @@ namespace API.Middlewares
             {
                 await _next(ctx);
             }
+            catch (UnauthorizedAccessException)
+            {
+                ctx.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                await ctx.Response.WriteAsJsonAsync(new
+                {
+                    message = "Session expired"
+                });
+            }
             catch (Exception ex)
             {
                 Log.Error(ex, "Unhandled exception occurred");

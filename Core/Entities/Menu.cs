@@ -12,5 +12,7 @@ namespace Core.Entities
         public string? Name { get; set; }
         public int Display_Order { get; set; }
         public int? Parent_Id { get; set; }
+        public string? Icon { get; set; }
+        public string? Link { get; set; }
     }
 }

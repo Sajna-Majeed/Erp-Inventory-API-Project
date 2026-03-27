@@ -13,6 +13,7 @@ namespace Core.Interfaces
         Task<IEnumerable<T>> QueryAsync<T>(string sp, object param = null, CommandType commandType = CommandType.StoredProcedure);
         Task<T> QuerySingleAsync<T>(string sp, object param = null, CommandType commandType = CommandType.StoredProcedure);
         Task<SqlMapper.GridReader> QueryMultipleAsync(string sp, object param = null, CommandType commandType = CommandType.StoredProcedure);
+        Task<int> ExecuteScalarAsync(string sp, object param = null, CommandType commandType = CommandType.StoredProcedure);
         Task<int> ExecuteAsync(string sp, object param = null, CommandType commandType = CommandType.StoredProcedure);
     }
 }

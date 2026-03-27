@@ -12,7 +12,7 @@ namespace Core.DTOs
         public string Code { get; set; }=string.Empty;
         [Required]
         public string Name { get; set; }= string.Empty;
-        public string Description { get; set; }=string.Empty ;
+        public string? Description { get; set; }=string.Empty ;
         public int Uom_Id { get; set; }
         public decimal Unit_Price { get; set; }
         public decimal Tax_Rate { get; set; }
@@ -25,7 +25,7 @@ namespace Core.DTOs
         public string Code { get; set; } = string.Empty;
         [Required]
         public string Name { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
+        public string? Description { get; set; } = string.Empty;
         public int Uom_Id { get; set; } 
         public decimal Unit_Price { get; set; }
         public decimal Tax_Rate { get; set; }

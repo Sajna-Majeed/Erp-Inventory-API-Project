@@ -33,7 +33,7 @@ namespace Core.Services
                 ? 1
                 : int.Parse(lastQuote.Quote_No.Split('-').Last()) + 1;
 
-            return $"QTN/-{DateTime.UtcNow.Year}/-{nextNumber:D5}";
+            return $"QTN/-{DateTime.UtcNow.ToString("yy")}/-{nextNumber:D5}";
         }
 
         public async Task<QuoteHeader> GetQuoteById(int id)
@@ -47,21 +47,39 @@ namespace Core.Services
 
             var header = await multi.ReadFirstAsync<QuoteHeader>();
             var lines = (await multi.ReadAsync<QuoteLine>()).ToList();
-
+            var files= (await multi.ReadAsync<FileAttchments>()).ToList();
             header.Lines = lines;
+            header.Attchments= files;
             return header;
         }
+        public async Task<QuoteInvoice> GetQuoteViewById(int id)
+        {
+            using var multi = await _uow.Repository.QueryMultipleAsync("sp_Quote_GetViewById",
+                                new
+                                {
+                                    q_id = id
+                                },
+                                commandType: CommandType.StoredProcedure);
 
-
+            var header = await multi.ReadFirstAsync<QuoteInvoice>();
+            var customer = await multi.ReadFirstAsync<Customer>();
+            var lines = (await multi.ReadAsync<QuoteInvoiceLine>()).ToList();
+            var files = (await multi.ReadAsync<FileAttchmentsDto>()).ToList();
+            header.Customer = customer;
+            header.Lines = lines;
+            header.Attchments = files;
+            return header;
+        }
+        
         public async Task<IEnumerable<QuoteDto>> GetQuotes()
         {
              return  await _uow.Repository.QueryAsync<QuoteDto>("sp_Quote_GetAll");
 
         }
-        public async Task<FileAttchments> GetFiles(int id)
+        public async Task<IEnumerable<FileAttchments>> GetFiles(int id)
         {
-            string sql = "select File_Name,File_Path from Quote_Attchments where q_file_id=@id";
-            return await _uow.Repository.QuerySingleAsync<FileAttchments>(sql,new
+            string sql = "select File_Name,File_Path from Quote_Attachments where q_id=@id";
+            return await _uow.Repository.QueryAsync<FileAttchments>(sql,new
             {
                 id = id
             },
@@ -82,35 +100,15 @@ namespace Core.Services
                 CreateQuoteLineDataTable(dto.Lines)
                     .AsTableValuedParameter("dbo.QuoteLineType"));
 
-            var QuoteId = await _uow.Repository.ExecuteAsync(
+            var Q_Id = await _uow.Repository.ExecuteScalarAsync(
                 "sp_Quote_Create",
                 parameters,
                 CommandType.StoredProcedure);
 
-            if (dto.Attchments != null)
-            {
-                var table = new DataTable();
-                table.Columns.Add("File_Name", typeof(string));
-                table.Columns.Add("File_Path", typeof(string));
-
-                foreach (var file in dto.Attchments)
-                {
-                    table.Rows.Add(file, file);
-                }
-
-                var fileparameters = new DynamicParameters();
-                fileparameters.Add("@q_id", QuoteId);
-                fileparameters.Add("@created_by", userId);
-                fileparameters.Add("@created_on", DateTime.UtcNow);
-                fileparameters.Add("@Files", table.AsTableValuedParameter("AttachmentType"));
-                await _uow.Repository.ExecuteAsync(
-                "SaveQuoteAttachments",
-                fileparameters,
-                CommandType.StoredProcedure);
-            }
+            
 
             _uow.Commit();
-            return QuoteId;
+            return Q_Id;
         }
 
         public async Task<bool> UpdateQuoteAsync( UpdateQuoteDto dto)
@@ -132,13 +130,47 @@ namespace Core.Services
             return rows > 0;
         }
 
+
+        public async Task SaveQuoteFiles(List<FileAttchmentsDto> dto,int quoteId,List<int> deletedIds)
+        {
+            var userId = _httpContextAccessor.HttpContext?.Items["UserId"] as int?;
+            if (dto != null)
+            {
+                var table = new DataTable();
+                table.Columns.Add("Original_Name", typeof(string));
+                table.Columns.Add("File_Name", typeof(string));
+                table.Columns.Add("File_Path", typeof(string));
+
+                foreach (var file in dto)
+                {
+                    table.Rows.Add(file.Original_Name, file.File_Name,file.File_Path);
+                }
+                var deletedIdsTable = new DataTable();
+                deletedIdsTable.Columns.Add("Id", typeof(int));
+
+                foreach (var id in deletedIds)
+                {
+                    deletedIdsTable.Rows.Add(id);
+                }
+                var fileparameters = new DynamicParameters();
+                fileparameters.Add("@q_id", quoteId);
+                fileparameters.Add("@created_by", userId);
+                fileparameters.Add("@created_on", DateTime.UtcNow);
+                fileparameters.Add("@DeletedIds", deletedIdsTable.AsTableValuedParameter("IntListType"));
+                fileparameters.Add("@Files", table.AsTableValuedParameter("AttachmentType"));
+                await _uow.Repository.ExecuteAsync(
+                "sp_Quote_Attachments_Save",
+                fileparameters,
+                CommandType.StoredProcedure);
+            }
+        }
         public async Task DeleteQuoteAsync(int id)
         {
             await _uow.Repository.ExecuteAsync(
                 "sp_Quote_Delete",
                 new
                 {
-                    Quote_id = id
+                    Q_id = id
                 });
 
             _uow.Commit();

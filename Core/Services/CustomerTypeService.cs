@@ -129,7 +129,7 @@ namespace Core.Services
 
         public async Task<bool> CheckNameExists(string name, int id)
         {
-            var sql = "SELECT  *  FROM [Customer_Type] where name=@name and ct_id!=@id";
+            var sql = "SELECT  *  FROM [Customer_Type] where name=@name and ct_id!=@id and is_deleted=0";
 
             var lastCode = await _uow.Repository.QuerySingleAsync<CustomerType>(sql, new
             {

@@ -46,7 +46,7 @@ namespace Core.Services
                     dto.Pd_Id,
                     dto.Module_Id,
                     dto.Unit_Price,
-                    CreatedBy = userId,
+                    CreatedBy = userId ?? 1,
                     CreatedOn=DateTime.UtcNow
                 });
             _uow.Commit();
@@ -69,7 +69,7 @@ namespace Core.Services
                     dto.Pd_Id,
                     dto.Module_Id,
                     dto.Unit_Price,
-                    UpdatedBy = userId,
+                    UpdatedBy = userId??1,
                     UpdatedOn = DateTime.UtcNow
                 });
 

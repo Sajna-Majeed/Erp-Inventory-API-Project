@@ -12,9 +12,10 @@ namespace Core.Interfaces
     {
         Task<int> CreateUserAsync(CreateUserDto dto);
         Task<IEnumerable<User>> GetUsersAsync();
-        Task<User> GetUsersByIdAsync(int userId);
+        Task ToggleStatusAsync(int id);
         Task UpdateUserAsync(UpdateUserDto dto);
         Task DeleteUserAsync(int id);
+        Task<bool> CheckNameExists(string name, int id);
 
     }
 }

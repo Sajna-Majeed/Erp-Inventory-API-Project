@@ -7,8 +7,10 @@ namespace Core.Interfaces
     {
         Task<string> GenerateQuoteNumberAsync();
         Task<IEnumerable<QuoteDto>> GetQuotes();
-        Task<FileAttchments> GetFiles(int id);
+        Task<IEnumerable<FileAttchments>> GetFiles(int id);
+        Task SaveQuoteFiles(List<FileAttchmentsDto> dto, int quoteId,List<int> ids);
         Task<QuoteHeader> GetQuoteById(int id);
+        Task<QuoteInvoice> GetQuoteViewById(int id);
         Task<int> CreateQuoteAsync(CreateQuoteDto dto);
         Task<bool> UpdateQuoteAsync( UpdateQuoteDto dto);
         Task DeleteQuoteAsync(int id);

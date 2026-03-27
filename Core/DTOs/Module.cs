@@ -12,7 +12,7 @@ namespace Core.DTOs
         public string Code { get; set; }=string.Empty;
         [Required]
         public string Name { get; set; }= string.Empty;
-        public string Description { get; set; }=string.Empty ;
+        public string? Description { get; set; }=string.Empty ;
         public int Product_Id { get; set; } 
     }
     public class UpdateModuleDto
@@ -23,7 +23,7 @@ namespace Core.DTOs
         public string Code { get; set; } = string.Empty;
         [Required]
         public string Name { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
+        public string? Description { get; set; } = string.Empty;
         public int Product_Id { get; set; }
     }
 

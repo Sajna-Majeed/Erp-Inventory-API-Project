@@ -1,8 +1,11 @@
 ﻿using Core.DTOs;
+using Core.Entities;
 using Core.Interfaces;
 using Core.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Data;
 using System.IO;
 
 namespace API.Controllers
@@ -26,21 +29,40 @@ namespace API.Controllers
 
 
 
-        [HttpPost]
-        public async Task<IActionResult> CreateQuote(CreateQuoteDto dto)
+        //[HttpPost]
+        //public async Task<IActionResult> CreateQuote(CreateQuoteDto dto)
+        //{
+
+        //    var id = await _service.CreateQuoteAsync(dto);
+        //    return Ok(ApiResponse<int>.Ok(id));
+        //}
+        //[HttpPut]
+        //public async Task<IActionResult> UpdateQuote(UpdateQuoteDto dto)
+        //{
+        //    await _service.UpdateQuoteAsync(dto);
+        //    return Ok(ApiResponse<string>.Ok("Quote updated"));
+        //}
+
+        [HttpPost()]
+        public async Task<IActionResult> CreateWithFiles([FromForm] string data,[FromForm] List<IFormFile> files)
         {
-            var id = await _service.CreateQuoteAsync(dto);
+            var quote = JsonConvert.DeserializeObject<CreateQuoteDto>(data);
+            var id = await _service.CreateQuoteAsync(quote);
+            await UploadFiles(files,id,null);
             return Ok(ApiResponse<int>.Ok(id));
         }
-
-
-        [HttpPut]
-        public async Task<IActionResult> UpdateQuote(UpdateQuoteDto dto)
+        [HttpPut()]
+        public async Task<IActionResult> UpdateWithFiles([FromForm] string data, [FromForm] List<IFormFile> files, [FromForm] string deletedFileIds)
         {
-            await _service.UpdateQuoteAsync(dto);
+            var quote = JsonConvert.DeserializeObject<UpdateQuoteDto>(data);
+            var deletedIds = JsonConvert.DeserializeObject<List<int>>(deletedFileIds);
+            await _service.UpdateQuoteAsync(quote);
+            // 2. Delete removed files
+           
+            await UploadFiles(files, quote.Q_Id,deletedIds);
             return Ok(ApiResponse<string>.Ok("Quote updated"));
         }
-
+      
         [HttpGet]
         public async Task<IActionResult> GetQuoteData()
         {
@@ -55,6 +77,12 @@ namespace API.Controllers
             return Ok(ApiResponse<object>.Ok(Quotes));
         }
 
+        [HttpGet("view/{id}")]
+        public async Task<IActionResult> GetQuoteViewById(int id)
+        {
+            var Quotes = await _service.GetQuoteViewById(id);
+            return Ok(ApiResponse<object>.Ok(Quotes));
+        }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteQuote(int id)
@@ -63,46 +91,44 @@ namespace API.Controllers
             return Ok(ApiResponse<object>.Ok("Quote Deleted"));
         }
 
-        [HttpPost("delete-multiple")]
-        public async Task<IActionResult> DeleteMultiple([FromBody] List<int> ids)
-        {
-            if (ids == null || ids.Count == 0)
-                return BadRequest("No ids provided");
-
-            
-
-            foreach (var id in ids)
-            {
-                var file = await _service.GetFiles(id);
-                var filePath = Path.Combine(
-                    Directory.GetCurrentDirectory(),
-                    "wwwroot",
-                    file.File_Path.TrimStart('/')
-                );
-
-                if (System.IO.File.Exists(filePath))
-                {
-                    System.IO.File.Delete(filePath);
-                }
-            }
-
-            return Ok(new { success = true });
-        }
 
 
-        // 
-        [HttpPost("upload")]
-        public async Task<IActionResult> UploadFiles([FromForm] List<IFormFile> files)
+        private async Task<IActionResult> UploadFiles(List<IFormFile> files,int quoteId,List<int>? deletedIds)
         {
             if (files == null || files.Count == 0)
                 return BadRequest("No files uploaded");
 
             var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
 
+            //Delete existing files
+            var old_files = await _service.GetFiles(quoteId);
+            if (deletedIds != null && deletedIds.Any())
+            {
+                old_files = old_files
+                    .Where(x => deletedIds.Contains(x.Q_File_Id))
+                    .ToList();
+                foreach (var file in old_files)
+                {
+
+                    var filePath = Path.Combine(
+                        Directory.GetCurrentDirectory(),
+                        "wwwroot",
+                        file.File_Path.TrimStart('/')
+                    );
+
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
+                }
+            }
+
+            //Create directory if not exisitng
             if (!Directory.Exists(uploadPath))
                 Directory.CreateDirectory(uploadPath);
 
-            var uploadedFiles = new List<object>();
+            //upload Files
+            var uploadedFiles = new List<FileAttchmentsDto>();
 
             foreach (var file in files)
             {
@@ -116,15 +142,19 @@ namespace API.Controllers
                         await file.CopyToAsync(stream);
                     }
 
-                    uploadedFiles.Add(new
+                    uploadedFiles.Add(new FileAttchmentsDto()
                     {
-                        originalName = file.FileName,
-                        savedName = fileName,
-                        path = "/uploads/" + fileName
+                        Original_Name = file.FileName,
+                        File_Name = fileName,
+                        File_Path = "/uploads/" + fileName
                     });
                 }
-            }
 
+
+
+            }
+           
+            await _service.SaveQuoteFiles(uploadedFiles, quoteId, deletedIds??new List<int>());
             return Ok(new
             {
                 success = true,

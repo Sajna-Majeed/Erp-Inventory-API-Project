@@ -27,10 +27,12 @@ namespace Infrastructure.Repositories
         {
             return await _connection.QueryMultipleAsync(sp,param,_transaction,commandType: commandType);
         }
-
+        public async Task<int> ExecuteScalarAsync(string sp, object param = null, CommandType commandType = CommandType.StoredProcedure)
+          => await _connection.ExecuteScalarAsync<int>(sp, param, _transaction, commandType: commandType);
 
         public async Task<int> ExecuteAsync(string sp, object param = null, CommandType commandType = CommandType.StoredProcedure)
             => await _connection.ExecuteAsync(sp, param, _transaction, commandType: commandType);
+
     }
 
 }

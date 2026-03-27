@@ -30,12 +30,12 @@ namespace Core.Services
                 "sp_User_Create",
                 new
                 {
-                    dto.Username,
-                    dto.FullName,
+                    Username=dto.User_Name,
+                    FullName=dto.Name,
                     dto.Email,
-                    Mobile=dto.MobileNumber,
+                    Mobile=dto.Mobile_Number,
                     Password = hashed,
-                    Role = dto.Role.ToString(),
+                    Role = dto.Role_Id,
                     CreatedBy = userId,
                     CreatedOn=DateTime.UtcNow
                 });
@@ -52,19 +52,20 @@ namespace Core.Services
                 "sp_User_Update",
                 new
                 {
-                    dto.Id,
-                    dto.Username,
-                    dto.FullName,
+                    Id=dto.User_Id,
+                    Username = dto.User_Name,
+                    FullName = dto.Name,
                     dto.Email,
-                    Mobile = dto.MobileNumber,
-                    Role =dto.Role.ToString(),
+                    Mobile = dto.Mobile_Number,
+                    Role =dto.Role_Id,
                     UpdatedBy = userId,
-                    UpdatedOn = DateTime.UtcNow
+                    UpdatedOn = DateTime.UtcNow,
+                    IsPartialUpdate=false
                 });
 
             _uow.Commit();
             var user = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
-            Log.Information("User {User} updated a user with id {Id}", user, dto.Id);
+            Log.Information("User {User} updated a user with id {Id}", user, dto.User_Id);
         }
 
         public async Task DeleteUserAsync(int id)
@@ -87,10 +88,31 @@ namespace Core.Services
             return await _uow.Repository.QueryAsync<User>(
                 "sp_User_GetAll");
         }
-        public async Task<User> GetUsersByIdAsync(int userId)
+        public async Task ToggleStatusAsync(int id)
         {
-            var sql = "Select [FullName] ,[Email],[MobileNumber],[UserName] ,[Password] ,[Role] from Users where userId =  " + userId;
-            return await _uow.Repository.QuerySingleAsync<User>( sql,null,CommandType.Text);
+            await _uow.Repository.ExecuteAsync(
+                "sp_User_Toggle",
+                new
+                {
+                    id = id
+                });
+
+            _uow.Commit();
+            var user = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+            Log.Information("User {User} updated a User status with id {Id}", user, id);
+        }
+
+        public async Task<bool> CheckNameExists(string name, int id)
+        {
+            var sql = "SELECT  *  FROM [Users] where user_name=@name and user_id!=@id";
+
+            var lastCode = await _uow.Repository.QuerySingleAsync<User>(sql, new
+            {
+                name,
+                id
+            }, CommandType.Text);
+
+            return lastCode != null;
         }
     }
 

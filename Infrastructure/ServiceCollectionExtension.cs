@@ -48,6 +48,7 @@ namespace Infrastructure
             services.AddScoped<ICustomerTypeService, CustomerTypeService>();
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<ICustomPriceService, CustomPriceService>();
+            services.AddScoped<IRoleService, RoleService>();
 
 
             return services;
