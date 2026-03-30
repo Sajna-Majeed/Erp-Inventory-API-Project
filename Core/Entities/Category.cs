@@ -6,14 +6,13 @@ using System.Threading.Tasks;
 
 namespace Core.Entities
 {
-    public class Product:Base_Entity
+    public class Category:Base_Entity
     {
-        public int Pd_Id { get; set; }
+        public int Cat_Id { get; set; }
         public string Code { get; set; }=string.Empty;
         public string Name { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
+        public string? Description { get; set; } = string.Empty;
         public int St_Id { get; set; }
         public string? ServiceType { get; set; }
-        public decimal Unit_Price { get; set; }
     }
 }
