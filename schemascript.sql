@@ -1,18 +1,100 @@
-﻿USE [BasicDb]
+﻿USE [master]
 GO
-/****** Object:  UserDefinedTableType [dbo].[AttachmentType]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  Database [BasicDb]    Script Date: 30-03-2026 16:38:12 ******/
+CREATE DATABASE [BasicDb]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'BasicDb', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.MSSQLSERVER\MSSQL\DATA\BasicDb.mdf' , SIZE = 335872KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'BasicDb_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.MSSQLSERVER\MSSQL\DATA\BasicDb_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT, LEDGER = OFF
+GO
+ALTER DATABASE [BasicDb] SET COMPATIBILITY_LEVEL = 160
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [BasicDb].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [BasicDb] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [BasicDb] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [BasicDb] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [BasicDb] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [BasicDb] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [BasicDb] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [BasicDb] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [BasicDb] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [BasicDb] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [BasicDb] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [BasicDb] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [BasicDb] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [BasicDb] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [BasicDb] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [BasicDb] SET  DISABLE_BROKER 
+GO
+ALTER DATABASE [BasicDb] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [BasicDb] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [BasicDb] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [BasicDb] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [BasicDb] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [BasicDb] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [BasicDb] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [BasicDb] SET RECOVERY SIMPLE 
+GO
+ALTER DATABASE [BasicDb] SET  MULTI_USER 
+GO
+ALTER DATABASE [BasicDb] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [BasicDb] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [BasicDb] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [BasicDb] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [BasicDb] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [BasicDb] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+ALTER DATABASE [BasicDb] SET QUERY_STORE = ON
+GO
+ALTER DATABASE [BasicDb] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANUP_POLICY = (STALE_QUERY_THRESHOLD_DAYS = 30), DATA_FLUSH_INTERVAL_SECONDS = 900, INTERVAL_LENGTH_MINUTES = 60, MAX_STORAGE_SIZE_MB = 1000, QUERY_CAPTURE_MODE = AUTO, SIZE_BASED_CLEANUP_MODE = AUTO, MAX_PLANS_PER_QUERY = 200, WAIT_STATS_CAPTURE_MODE = ON)
+GO
+USE [BasicDb]
+GO
+/****** Object:  UserDefinedTableType [dbo].[AttachmentType]    Script Date: 30-03-2026 16:38:12 ******/
 CREATE TYPE [dbo].[AttachmentType] AS TABLE(
 	[Original_Name] [nvarchar](255) NULL,
 	[File_Name] [nvarchar](255) NULL,
 	[File_Path] [nvarchar](500) NULL
 )
 GO
-/****** Object:  UserDefinedTableType [dbo].[IntListType]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  UserDefinedTableType [dbo].[IntListType]    Script Date: 30-03-2026 16:38:12 ******/
 CREATE TYPE [dbo].[IntListType] AS TABLE(
 	[Id] [int] NULL
 )
 GO
-/****** Object:  UserDefinedTableType [dbo].[InvoiceLineType]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  UserDefinedTableType [dbo].[InvoiceLineType]    Script Date: 30-03-2026 16:38:12 ******/
 CREATE TYPE [dbo].[InvoiceLineType] AS TABLE(
 	[item_name] [varchar](50) NULL,
 	[description] [varchar](50) NULL,
@@ -28,12 +110,12 @@ CREATE TYPE [dbo].[InvoiceLineType] AS TABLE(
 	[amt_in_aed] [decimal](18, 6) NULL
 )
 GO
-/****** Object:  UserDefinedTableType [dbo].[PermissionIdTableType]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  UserDefinedTableType [dbo].[PermissionIdTableType]    Script Date: 30-03-2026 16:38:12 ******/
 CREATE TYPE [dbo].[PermissionIdTableType] AS TABLE(
 	[PermissionId] [int] NULL
 )
 GO
-/****** Object:  UserDefinedTableType [dbo].[QuoteLineType]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  UserDefinedTableType [dbo].[QuoteLineType]    Script Date: 30-03-2026 16:38:12 ******/
 CREATE TYPE [dbo].[QuoteLineType] AS TABLE(
 	[st_id] [int] NULL,
 	[pd_id] [int] NULL,
@@ -42,7 +124,7 @@ CREATE TYPE [dbo].[QuoteLineType] AS TABLE(
 	[license_count] [int] NULL
 )
 GO
-/****** Object:  Table [dbo].[AppLogs]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  Table [dbo].[AppLogs]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -67,41 +149,30 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[BussinessPartner]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  Table [dbo].[Category]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[BussinessPartner](
-	[bp_id] [int] IDENTITY(1,1) NOT NULL,
-	[name] [varchar](50) NULL,
-	[email] [varchar](150) NULL,
-	[contact_person] [varchar](50) NULL,
-	[mobile_no] [varchar](10) NULL,
-	[addressline1] [varchar](150) NULL,
-	[city] [varchar](50) NULL,
-	[country] [varchar](50) NULL,
-	[country_subdivision] [varchar](50) NULL,
-	[e_identifier] [varchar](15) NULL,
-	[legal_reg_identifier] [varchar](15) NULL,
-	[legal_reg_type] [varchar](30) NULL,
-	[tax_identifier] [varchar](30) NULL,
-	[tax_scheme_code] [varchar](10) NULL,
-	[is_customer] [bit] NOT NULL,
-	[is_seller] [bit] NOT NULL,
-	[created_by] [int] NOT NULL,
-	[created_on] [datetime] NOT NULL,
+CREATE TABLE [dbo].[Category](
+	[cat_Id] [int] IDENTITY(1,1) NOT NULL,
+	[code] [varchar](10) NULL,
+	[name] [varchar](30) NULL,
+	[description] [varchar](max) NULL,
+	[st_Id] [int] NULL,
+	[created_by] [int] NULL,
+	[created_on] [datetime] NULL,
 	[updated_by] [int] NULL,
 	[updated_on] [datetime] NULL,
-	[is_deleted] [bit] NOT NULL,
-	[is_active] [bit] NOT NULL,
- CONSTRAINT [PK_Seller] PRIMARY KEY CLUSTERED 
+	[is_deleted] [bit] NULL,
+	[is_active] [bit] NULL,
+ CONSTRAINT [PK_products] PRIMARY KEY CLUSTERED 
 (
-	[bp_id] ASC
+	[cat_Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Company]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  Table [dbo].[Company]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -131,32 +202,7 @@ CREATE TABLE [dbo].[Company](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Custom_Price]    Script Date: 27-03-2026 11:38:02 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[Custom_Price](
-	[custom_prod_id] [int] IDENTITY(1,1) NOT NULL,
-	[code] [varchar](10) NULL,
-	[customer_id] [int] NULL,
-	[st_id] [int] NULL,
-	[pd_id] [int] NULL,
-	[module_id] [int] NULL,
-	[unit_price] [decimal](18, 3) NULL,
-	[created_by] [int] NOT NULL,
-	[created_on] [datetime] NOT NULL,
-	[updated_by] [int] NULL,
-	[updated_on] [datetime] NULL,
-	[is_deleted] [bit] NULL,
-	[is_active] [bit] NULL,
- CONSTRAINT [PK_Custome_Price] PRIMARY KEY CLUSTERED 
-(
-	[custom_prod_id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[Customer]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  Table [dbo].[Customer]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -187,33 +233,7 @@ CREATE TABLE [dbo].[Customer](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Customer_Service]    Script Date: 27-03-2026 11:38:02 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[Customer_Service](
-	[cus_srv_id] [int] IDENTITY(1,1) NOT NULL,
-	[customer_id] [int] NULL,
-	[pd_id] [int] NULL,
-	[module_id] [int] NULL,
-	[license_count] [int] NULL,
-	[notes] [text] NULL,
-	[created_by] [int] NOT NULL,
-	[created_on] [datetime] NOT NULL,
-	[updated_by] [int] NULL,
-	[updated_on] [datetime] NULL,
-	[is_deleted] [bit] NOT NULL,
-	[is_active] [nchar](10) NULL,
-	[last_billed_date] [datetime] NULL,
-	[expiary_date] [datetime] NULL,
- CONSTRAINT [PK_Customer_Service] PRIMARY KEY CLUSTERED 
-(
-	[cus_srv_id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[Customer_Type]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  Table [dbo].[Customer_Type]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -235,7 +255,7 @@ CREATE TABLE [dbo].[Customer_Type](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[CustomMenu]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  Table [dbo].[CustomMenu]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -251,7 +271,7 @@ CREATE TABLE [dbo].[CustomMenu](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ErrorLogs]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  Table [dbo].[ErrorLogs]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -270,7 +290,51 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Menu]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  Table [dbo].[License_Mode]    Script Date: 30-03-2026 16:38:12 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[License_Mode](
+	[lm_id] [int] IDENTITY(1,1) NOT NULL,
+	[code] [varchar](20) NULL,
+	[name] [varchar](20) NOT NULL,
+	[description] [varchar](max) NULL,
+	[created_by] [int] NOT NULL,
+	[created_on] [datetime] NOT NULL,
+	[updated_by] [int] NULL,
+	[updated_on] [datetime] NULL,
+	[is_deleted] [bit] NOT NULL,
+	[is_active] [bit] NOT NULL,
+ CONSTRAINT [PK_ALF_License_Mode] PRIMARY KEY CLUSTERED 
+(
+	[lm_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[License_Type]    Script Date: 30-03-2026 16:38:12 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[License_Type](
+	[lt_id] [int] IDENTITY(1,1) NOT NULL,
+	[code] [varchar](20) NULL,
+	[name] [varchar](20) NOT NULL,
+	[description] [varchar](max) NULL,
+	[created_by] [int] NOT NULL,
+	[created_on] [datetime] NOT NULL,
+	[updated_by] [int] NULL,
+	[updated_on] [datetime] NULL,
+	[is_deleted] [bit] NOT NULL,
+	[is_active] [bit] NOT NULL,
+ CONSTRAINT [PK_License_Type] PRIMARY KEY CLUSTERED 
+(
+	[lt_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Menu]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -288,30 +352,7 @@ CREATE TABLE [dbo].[Menu](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Module]    Script Date: 27-03-2026 11:38:02 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[Module](
-	[module_id] [int] IDENTITY(1,1) NOT NULL,
-	[code] [varchar](10) NOT NULL,
-	[name] [varchar](20) NOT NULL,
-	[description] [varchar](max) NULL,
-	[product_id] [int] NULL,
-	[created_by] [int] NOT NULL,
-	[created_on] [datetime] NOT NULL,
-	[updated_by] [int] NULL,
-	[updated_on] [datetime] NULL,
-	[is_deleted] [bit] NOT NULL,
-	[is_active] [bit] NOT NULL,
- CONSTRAINT [PK_Module] PRIMARY KEY CLUSTERED 
-(
-	[module_id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[Permissions]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  Table [dbo].[Permissions]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -337,56 +378,58 @@ CREATE TABLE [dbo].[Permissions](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Product]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  Table [dbo].[PriceList]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[Product](
-	[prod_Id] [int] IDENTITY(1,1) NOT NULL,
-	[code] [varchar](10) NULL,
-	[name] [varchar](30) NULL,
-	[description] [varchar](max) NULL,
-	[uom_id] [int] NULL,
-	[unit_price] [decimal](18, 3) NULL,
-	[tax_rate] [decimal](18, 3) NULL,
-	[created_by] [int] NULL,
-	[created_on] [datetime] NULL,
+CREATE TABLE [dbo].[PriceList](
+	[pl_id] [int] IDENTITY(1,1) NOT NULL,
+	[st_id] [int] NOT NULL,
+	[cat_id] [int] NOT NULL,
+	[pd_id] [int] NULL,
+	[lt_id] [int] NULL,
+	[lm_id] [int] NULL,
+	[unit_rate] [decimal](18, 2) NOT NULL,
+	[alf_rate] [decimal](5, 2) NULL,
+	[effective_from] [date] NULL,
+	[effective_to] [date] NULL,
+	[created_by] [int] NOT NULL,
+	[created_on] [datetime] NOT NULL,
 	[updated_by] [int] NULL,
 	[updated_on] [datetime] NULL,
-	[is_deleted] [bit] NULL,
-	[is_active] [bit] NULL,
- CONSTRAINT [PK_product] PRIMARY KEY CLUSTERED 
+	[is_deleted] [bit] NOT NULL,
+	[is_active] [bit] NOT NULL,
+PRIMARY KEY CLUSTERED 
 (
-	[prod_Id] ASC
+	[pl_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Products]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  Table [dbo].[Products]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Products](
-	[prod_Id] [int] IDENTITY(1,1) NOT NULL,
-	[code] [varchar](10) NULL,
-	[name] [varchar](30) NULL,
+	[pd_id] [int] IDENTITY(1,1) NOT NULL,
+	[code] [varchar](10) NOT NULL,
+	[name] [varchar](50) NOT NULL,
 	[description] [varchar](max) NULL,
-	[st_Id] [int] NULL,
-	[unit_price] [decimal](18, 3) NULL,
-	[created_by] [int] NULL,
-	[created_on] [datetime] NULL,
+	[cat_id] [int] NULL,
+	[created_by] [int] NOT NULL,
+	[created_on] [datetime] NOT NULL,
 	[updated_by] [int] NULL,
 	[updated_on] [datetime] NULL,
-	[is_deleted] [bit] NULL,
-	[is_active] [bit] NULL,
- CONSTRAINT [PK_products] PRIMARY KEY CLUSTERED 
+	[is_deleted] [bit] NOT NULL,
+	[is_active] [bit] NOT NULL,
+ CONSTRAINT [PK_ALF_License_Type] PRIMARY KEY CLUSTERED 
 (
-	[prod_Id] ASC
+	[pd_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Quote_Attachments]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  Table [dbo].[Quote_Attachments]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -405,7 +448,7 @@ CREATE TABLE [dbo].[Quote_Attachments](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Quote_Header]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  Table [dbo].[Quote_Header]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -415,9 +458,9 @@ CREATE TABLE [dbo].[Quote_Header](
 	[quote_no] [varchar](20) NULL,
 	[quote_date] [date] NULL,
 	[customer_id] [int] NULL,
-	[total_amt] [decimal](18, 6) NULL,
-	[discount] [decimal](18, 6) NULL,
-	[net_amt] [decimal](18, 6) NULL,
+	[total_amt] [decimal](18, 3) NULL,
+	[discount] [decimal](18, 3) NULL,
+	[net_amt] [decimal](18, 3) NULL,
 	[increased_rate] [int] NULL,
 	[t_c] [varchar](max) NULL,
 	[quote_send] [bit] NOT NULL,
@@ -435,7 +478,7 @@ CREATE TABLE [dbo].[Quote_Header](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Quote_Line]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  Table [dbo].[Quote_Line]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -455,7 +498,7 @@ CREATE TABLE [dbo].[Quote_Line](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[RefreshTokens]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  Table [dbo].[RefreshTokens]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -472,7 +515,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[RolePermissions]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  Table [dbo].[RolePermissions]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -487,7 +530,7 @@ CREATE TABLE [dbo].[RolePermissions](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Roles]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  Table [dbo].[Roles]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -512,7 +555,7 @@ UNIQUE NONCLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Service_Type]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  Table [dbo].[Service_Type]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -534,7 +577,7 @@ CREATE TABLE [dbo].[Service_Type](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[UnitOfMeasure]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  Table [dbo].[UnitOfMeasure]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -556,7 +599,7 @@ UNIQUE NONCLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Users]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  Table [dbo].[Users]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -581,27 +624,45 @@ CREATE TABLE [dbo].[Users](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-ALTER TABLE [dbo].[BussinessPartner] ADD  CONSTRAINT [DF_Seller_is_customer]  DEFAULT ((0)) FOR [is_customer]
+SET ANSI_PADDING ON
 GO
-ALTER TABLE [dbo].[BussinessPartner] ADD  CONSTRAINT [DF_Seller_is_seller]  DEFAULT ((0)) FOR [is_seller]
+/****** Object:  Index [IX_Logs_CorrelationId]    Script Date: 30-03-2026 16:38:12 ******/
+CREATE NONCLUSTERED INDEX [IX_Logs_CorrelationId] ON [dbo].[AppLogs]
+(
+	[CorrelationId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
-ALTER TABLE [dbo].[BussinessPartner] ADD  CONSTRAINT [DF_BussinessPartner_is_deleted]  DEFAULT ((0)) FOR [is_deleted]
+SET ANSI_PADDING ON
 GO
-ALTER TABLE [dbo].[BussinessPartner] ADD  CONSTRAINT [DF_BussinessPartner_is_active]  DEFAULT ((1)) FOR [is_active]
+/****** Object:  Index [IX_Logs_Level]    Script Date: 30-03-2026 16:38:12 ******/
+CREATE NONCLUSTERED INDEX [IX_Logs_Level] ON [dbo].[AppLogs]
+(
+	[Level] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_Logs_TimeStamp]    Script Date: 30-03-2026 16:38:12 ******/
+CREATE NONCLUSTERED INDEX [IX_Logs_TimeStamp] ON [dbo].[AppLogs]
+(
+	[TimeStamp] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_Logs_TimeStamp]    Script Date: 30-03-2026 16:38:12 ******/
+CREATE NONCLUSTERED INDEX [IX_Logs_TimeStamp] ON [dbo].[ErrorLogs]
+(
+	[TimeStamp] DESC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Category] ADD  CONSTRAINT [DF_Product_is_deleted]  DEFAULT ((0)) FOR [is_deleted]
+GO
+ALTER TABLE [dbo].[Category] ADD  CONSTRAINT [DF_Product_is_active]  DEFAULT ((1)) FOR [is_active]
 GO
 ALTER TABLE [dbo].[Company] ADD  CONSTRAINT [DF_Company_name]  DEFAULT ('') FOR [name]
 GO
 ALTER TABLE [dbo].[Company] ADD  CONSTRAINT [DF_Company_is_deleted]  DEFAULT ((0)) FOR [is_deleted]
 GO
-ALTER TABLE [dbo].[Custom_Price] ADD  CONSTRAINT [DF_Custome_Price_is_deleted]  DEFAULT ((0)) FOR [is_deleted]
-GO
-ALTER TABLE [dbo].[Custom_Price] ADD  CONSTRAINT [DF_Custome_Price_is_active]  DEFAULT ((1)) FOR [is_active]
-GO
 ALTER TABLE [dbo].[Customer] ADD  CONSTRAINT [DF_Customer_is_deleted]  DEFAULT ((0)) FOR [is_deleted]
 GO
 ALTER TABLE [dbo].[Customer] ADD  CONSTRAINT [DF_Customer_is_active]  DEFAULT ((1)) FOR [is_active]
-GO
-ALTER TABLE [dbo].[Customer_Service] ADD  CONSTRAINT [DF_Customer_Service_is_deleted]  DEFAULT ((0)) FOR [is_deleted]
 GO
 ALTER TABLE [dbo].[Customer_Type] ADD  CONSTRAINT [DF_Customer_type_is_deleted]  DEFAULT ((0)) FOR [is_deleted]
 GO
@@ -609,23 +670,31 @@ ALTER TABLE [dbo].[Customer_Type] ADD  CONSTRAINT [DF_Customer_type_is_active]  
 GO
 ALTER TABLE [dbo].[ErrorLogs] ADD  DEFAULT (getutcdate()) FOR [TimeStamp]
 GO
+ALTER TABLE [dbo].[License_Mode] ADD  CONSTRAINT [DF_License_Mode_created_by]  DEFAULT ((1)) FOR [created_by]
+GO
+ALTER TABLE [dbo].[License_Mode] ADD  CONSTRAINT [DF_License_Mode_is_deleted]  DEFAULT ((0)) FOR [is_deleted]
+GO
+ALTER TABLE [dbo].[License_Mode] ADD  CONSTRAINT [DF_License_Mode_is_active]  DEFAULT ((1)) FOR [is_active]
+GO
+ALTER TABLE [dbo].[License_Type] ADD  CONSTRAINT [DF_License_Type_is_deleted]  DEFAULT ((0)) FOR [is_deleted]
+GO
+ALTER TABLE [dbo].[License_Type] ADD  CONSTRAINT [DF_License_Type_is_active]  DEFAULT ((1)) FOR [is_active]
+GO
 ALTER TABLE [dbo].[Menu] ADD  CONSTRAINT [DF_Menu_display_order]  DEFAULT ((0)) FOR [display_order]
-GO
-ALTER TABLE [dbo].[Module] ADD  CONSTRAINT [DF_Module_is_deleted]  DEFAULT ((0)) FOR [is_deleted]
-GO
-ALTER TABLE [dbo].[Module] ADD  CONSTRAINT [DF_Module_is_active]  DEFAULT ((1)) FOR [is_active]
 GO
 ALTER TABLE [dbo].[Permissions] ADD  CONSTRAINT [DF__Permissio__creat__02925FBF]  DEFAULT (getdate()) FOR [created_on]
 GO
 ALTER TABLE [dbo].[Permissions] ADD  CONSTRAINT [DF__Permissio__is_de__038683F8]  DEFAULT ((0)) FOR [is_deleted]
 GO
-ALTER TABLE [dbo].[Product] ADD  CONSTRAINT [DF_Product_code]  DEFAULT ('') FOR [code]
+ALTER TABLE [dbo].[PriceList] ADD  CONSTRAINT [DF_PriceList_is_deleted]  DEFAULT ((0)) FOR [is_deleted]
 GO
-ALTER TABLE [dbo].[Product] ADD  CONSTRAINT [DF_Product_description]  DEFAULT ('') FOR [description]
+ALTER TABLE [dbo].[PriceList] ADD  CONSTRAINT [DF_PriceList_is_active]  DEFAULT ((1)) FOR [is_active]
 GO
-ALTER TABLE [dbo].[Product] ADD  CONSTRAINT [DF_product_is_deleted]  DEFAULT ((0)) FOR [is_deleted]
+ALTER TABLE [dbo].[Products] ADD  CONSTRAINT [DF_ALF_License_Type_created_by]  DEFAULT ((1)) FOR [created_by]
 GO
-ALTER TABLE [dbo].[Product] ADD  CONSTRAINT [DF_Product_is_active]  DEFAULT ((1)) FOR [is_active]
+ALTER TABLE [dbo].[Products] ADD  CONSTRAINT [DF_ALF_License_Type_is_deleted]  DEFAULT ((0)) FOR [is_deleted]
+GO
+ALTER TABLE [dbo].[Products] ADD  CONSTRAINT [DF_ALF_License_Type_is_active]  DEFAULT ((1)) FOR [is_active]
 GO
 ALTER TABLE [dbo].[Quote_Header] ADD  CONSTRAINT [DF_Quote_Header_is_deleted]  DEFAULT ((0)) FOR [is_deleted]
 GO
@@ -651,140 +720,94 @@ ALTER TABLE [dbo].[Users] ADD  CONSTRAINT [DF__Users__IsDeleted__4D94879B]  DEFA
 GO
 ALTER TABLE [dbo].[Users] ADD  CONSTRAINT [DF_Users_is_active]  DEFAULT ((1)) FOR [is_active]
 GO
-/****** Object:  StoredProcedure [dbo].[sp_BussinessPartner_Delete]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Category_Delete]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[sp_BussinessPartner_Delete]
+
+CREATE PROCEDURE [dbo].[sp_Category_Delete]
 (
-    @bp_id int
+    @id int
 )
 AS
 BEGIN
     SET NOCOUNT ON;
-	UPDATE BussinessPartner
+	UPDATE Category
     SET 
         is_deleted = 1
-    WHERE bp_id = @bp_id;
+    WHERE cat_Id = @id;
 
     SELECT @@ROWCOUNT AS RowsAffected;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_BussinessPartner_GetAll]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Category_GetAll]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[sp_BussinessPartner_GetAll]
-AS
-BEGIN
-    SET NOCOUNT ON;
 
-    SELECT *
-    FROM BussinessPartner
-	where is_deleted = 0
-    ORDER BY bp_id DESC;
-END
-GO
-/****** Object:  StoredProcedure [dbo].[sp_BussinessPartner_GetById]    Script Date: 27-03-2026 11:38:02 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[sp_BussinessPartner_GetById]
+CREATE PROCEDURE [dbo].[sp_Category_GetAll]
 (
-    @bp_id int
+    @id int
 )
 AS
 BEGIN
     SET NOCOUNT ON;
-
-    SELECT *
-    FROM BussinessPartner
-    WHERE bp_id = @bp_id;
+	if(@id=0)
+    SELECT p.cat_Id,p.name,p.code,p.description,p.st_id,p.is_active,s.name as ServiceType
+    FROM Category p
+	join Service_Type s on s.st_id=p.st_id
+	where p.is_deleted = 0
+    ORDER BY p.cat_Id ASC;
+	else
+	SELECT p.cat_Id,p.name,p.code,p.description,p.st_id,p.is_active,s.name as ServiceType
+    FROM Category p
+	join Service_Type s on s.st_id=p.st_id
+	where p.is_deleted = 0 and p.st_id=@id
+    ORDER BY p.cat_Id ASC;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_BussinessPartner_Insert]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Category_Insert]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[sp_BussinessPartner_Insert]
-(
-	@code varchar(10),
-	@customer_type_id int,
-    @name varchar(50),
-    @contact_person varchar(50),
-    @email varchar(150),
-    @mobile_Number varchar(10),
-    @e_identifier varchar(15),
-    @legal_reg_identifier varchar(15),
-    @legal_reg_type varchar(30),
-    @tax_identifier varchar(30),
-    @tax_scheme_code varchar(10),
-    @addressline1 varchar(50),
-    @city varchar(50),
-    @country_subdivision varchar(50),
-    @country varchar(50),
-    @is_customer bit,
-    @is_seller bit,
-	@CreatedBy int,
+
+
+
+CREATE PROCEDURE [dbo].[sp_Category_Insert]
+    @Code VARCHAR(10),
+	@Name VARCHAR(30),
+	@Description VARCHAR(500),
+	@st_Id INT,
+    @CreatedBy int,
     @CreatedOn Datetime
-)
 AS
 BEGIN
-    SET NOCOUNT ON;
-
-    INSERT INTO BussinessPartner
+    INSERT INTO Category
     (
-        name,
-		code,
-		customer_type_id,
-        contact_person,
-        email,
-        mobile_no,
-        e_identifier,
-        legal_reg_identifier,
-        legal_reg_type,
-        tax_identifier,
-        tax_scheme_code,
-        addressline1,
-        city,
-        country_subdivision,
-        country,
-        is_customer,
-        is_seller,
-		created_by,
-		created_on
+        code
+      ,name
+      ,description
+      ,st_Id
+      ,created_by
+      ,created_on
     )
     VALUES
     (
-        @name,
-		@code,
-		@customer_type_id,
-        @contact_person,
-        @email,
-        @mobile_Number,
-        @e_identifier,
-        @legal_reg_identifier,
-        @legal_reg_type,
-        @tax_identifier,
-        @tax_scheme_code,
-        @addressline1,
-        @city,
-        @country_subdivision,
-        @country,
-        @is_customer,
-        @is_seller,
-		@CreatedBy,
-		@CreatedOn
+        @Code,
+		@Name,
+		@Description,
+		@st_Id,
+        @CreatedBy,
+        @CreatedOn
     );
 
-    SELECT SCOPE_IDENTITY() AS bp_id;
+    SELECT SCOPE_IDENTITY();
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_BussinessPartner_Toggle]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Category_Toggle]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -794,10 +817,9 @@ GO
 
 
 
-
-CREATE PROCEDURE [dbo].[sp_BussinessPartner_Toggle]
+CREATE PROCEDURE [dbo].[sp_Category_Toggle]
 (
-    @bp_id int
+    @Id int
 )
 AS
 BEGIN
@@ -806,44 +828,32 @@ BEGIN
     DECLARE @status BIT;
 
     SELECT @status = is_active
-    FROM BussinessPartner
-     WHERE bp_id = @bp_id;
+    FROM Category
+    WHERE cat_Id = @Id;
 
-    UPDATE BussinessPartner
+    UPDATE Category
     SET is_active = CASE 
                         WHEN @status = 1 THEN 0
                         ELSE 1
                     END
-     WHERE bp_id = @bp_id;
+    WHERE cat_Id = @Id;
 
     SELECT @@ROWCOUNT AS RowsAffected;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_BussinessPartner_Update]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Category_Update]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[sp_BussinessPartner_Update]
+
+CREATE PROCEDURE [dbo].[sp_Category_Update]
 (
-    @bp_id int,
-	@code varchar(10),
-	@customer_type_id int,
-    @name varchar(50),
-    @contact_person varchar(50),
-    @email varchar(150),
-    @mobile_number varchar(10),
-    @e_identifier varchar(15),
-    @legal_reg_identifier varchar(15),
-    @legal_reg_type varchar(30),
-    @tax_identifier varchar(30),
-    @tax_scheme_code varchar(10),
-    @addressline1 varchar(50),
-    @city varchar(50),
-    @country_subdivision varchar(50),
-    @country varchar(50),
-    @is_customer tinyint,
-    @is_seller tinyint,
+    @cat_id int,
+    @Code VARCHAR(10),
+	@Name VARCHAR(30),
+	@Description VARCHAR(500),
+	@st_Id INT,
 	@UpdatedBy INT,
 	@UpdatedOn Datetime
 )
@@ -851,33 +861,20 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    UPDATE BussinessPartner
+    UPDATE Category
     SET
         name = @name,
-		code=@code,
-		customer_type_id=@customer_type_id,
-        contact_person = @contact_person,
-        email = @email,
-        mobile_no = @mobile_number,
-        e_identifier = @e_identifier,
-        legal_reg_identifier = @legal_reg_identifier,
-        legal_reg_type = @legal_reg_type,
-        tax_identifier = @tax_identifier,
-        tax_scheme_code = @tax_scheme_code,
-        addressline1 = @addressline1,
-        city = @city,
-        country_subdivision = @country_subdivision,
-        country = @country,
-        is_customer = @is_customer,
-        is_seller = @is_seller,
+        code = @Code,
+        description = @Description,
+        st_Id = @st_Id,
 		updated_by=@UpdatedBy,
 		updated_on=@UpdatedOn
-    WHERE bp_id = @bp_id;
+    WHERE cat_Id = @cat_id;
 
     SELECT @@ROWCOUNT AS RowsAffected;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Company_GetById]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Company_GetById]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -898,7 +895,7 @@ BEGIN
     WHERE company_id = @id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Company_Menu]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Company_Menu]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -919,210 +916,7 @@ BEGIN
    WHERE company_id = @id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Custom_Price_Delete]    Script Date: 27-03-2026 11:38:02 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE PROCEDURE [dbo].[sp_Custom_Price_Delete]
-(
-    @id int
-)
-AS
-BEGIN
-    SET NOCOUNT ON;
-	UPDATE Custom_Price
-    SET 
-        is_deleted = 1
-    WHERE custom_prod_id = @id;
-
-    SELECT @@ROWCOUNT AS RowsAffected;
-END
-GO
-/****** Object:  StoredProcedure [dbo].[sp_Custom_Price_Filtered]    Script Date: 27-03-2026 11:38:02 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-CREATE PROCEDURE [dbo].[sp_Custom_Price_Filtered]
-(
-    @pd_id int,
-	@customer_id int,
-	@st_id int,
-	@module_id int
-)
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    SELECT *
-    FROM Custom_Price
-    WHERE custom_prod_id = @customer_id and pd_id=@pd_id and st_id=@st_id and module_id=@module_id and is_deleted=0;
-END
-GO
-/****** Object:  StoredProcedure [dbo].[sp_Custom_Price_GetAll]    Script Date: 27-03-2026 11:38:02 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE PROCEDURE [dbo].[sp_Custom_Price_GetAll]
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    SELECT c.code,c.custom_prod_id,c.st_id,c.pd_id,c.module_id,c.unit_price,c.customer_id,c.is_active,
-	s.Name as ServiceType, p.Name as Product, m.name as Module,b.name as Customer
-    FROM Custom_Price c
-	join Service_Type s on s.st_id=c.st_id
-	join Customer b on b.customer_id=c.customer_id
-	join Product p on p.prod_Id=c.pd_id
-	join Module m on m.module_id=c.module_id
-	where c.is_deleted = 0
-    ORDER BY c.custom_prod_id DESC;
-END
-GO
-/****** Object:  StoredProcedure [dbo].[sp_Custom_Price_GetById]    Script Date: 27-03-2026 11:38:02 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE PROCEDURE [dbo].[sp_Custom_Price_GetById]
-(
-    @id int
-)
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    SELECT *
-    FROM Custom_Price
-    WHERE custom_prod_id = @id;
-END
-GO
-/****** Object:  StoredProcedure [dbo].[sp_Custom_Price_Insert]    Script Date: 27-03-2026 11:38:02 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE PROCEDURE [dbo].[sp_Custom_Price_Insert]
-(
-	@code varchar(10),
-	@customer_id int,
-	@st_id int,
-	@pd_id int,
-	@module_id int,
-	@unit_price decimal(18,3),
-	@CreatedBy int,
-    @CreatedOn Datetime
-)
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    INSERT INTO Custom_Price
-    (	code,
-        customer_id,
-		st_id,
-		pd_id,
-        module_id,
-        unit_price,
-		created_by,
-		created_on
-    )
-    VALUES
-    (	@code,
-        @customer_id,
-		@st_id,
-		@pd_id,
-        @module_id,
-        @unit_price,
-		@CreatedBy,
-		@CreatedOn
-    );
-
-    SELECT SCOPE_IDENTITY() AS custom_prod_id;
-END
-GO
-/****** Object:  StoredProcedure [dbo].[sp_Custom_Price_Toggle]    Script Date: 27-03-2026 11:38:02 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-
-
-
-
-
-CREATE PROCEDURE [dbo].[sp_Custom_Price_Toggle]
-(
-    @id int
-)
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    DECLARE @status BIT;
-
-    SELECT @status = is_active
-    FROM Custom_Price
-     WHERE custom_prod_id = @id;
-
-    UPDATE Custom_Price
-    SET is_active = CASE 
-                        WHEN @status = 1 THEN 0
-                        ELSE 1
-                    END
-     WHERE custom_prod_id = @id;
-
-    SELECT @@ROWCOUNT AS RowsAffected;
-END
-GO
-/****** Object:  StoredProcedure [dbo].[sp_Custom_Price_Update]    Script Date: 27-03-2026 11:38:02 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE PROCEDURE [dbo].[sp_Custom_Price_Update]
-(	
-	@code varchar(10),
-    @custom_prod_id int,
-	@customer_id int,
-	@st_id int,
-	@pd_id int,
-	@module_id int,
-	@unit_price decimal(18,3),
-	@UpdatedBy INT,
-	@UpdatedOn Datetime
-)
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    UPDATE Custom_Price
-    SET
-       customer_id=@customer_id,
-	   code=@code,
-	   st_id=@st_id,
-	   pd_id=@pd_id,
-	   module_id=@module_id,
-	   unit_price=@unit_price,
-	   updated_by=@UpdatedBy,
-		updated_on=@UpdatedOn
-    WHERE custom_prod_id = @custom_prod_id;
-
-    SELECT @@ROWCOUNT AS RowsAffected;
-END
-GO
-/****** Object:  StoredProcedure [dbo].[sp_Customer_Delete]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Customer_Delete]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1143,7 +937,7 @@ BEGIN
     SELECT @@ROWCOUNT AS RowsAffected;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Customer_GetAll]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Customer_GetAll]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1157,10 +951,10 @@ BEGIN
     SELECT *
     FROM Customer
 	where is_deleted = 0
-    ORDER BY customer_id DESC;
+    ORDER BY customer_id asc;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Customer_GetById]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Customer_GetById]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1179,7 +973,7 @@ BEGIN
     WHERE customer_id = @customer_id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Customer_Insert]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Customer_Insert]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1244,7 +1038,7 @@ BEGIN
     SELECT SCOPE_IDENTITY() AS customer_id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Customer_Toggle]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Customer_Toggle]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1280,7 +1074,7 @@ BEGIN
     SELECT @@ROWCOUNT AS RowsAffected;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Customer_Type_Delete]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Customer_Type_Delete]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1303,7 +1097,7 @@ BEGIN
     SELECT @@ROWCOUNT AS RowsAffected;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Customer_Type_GetAll]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Customer_Type_GetAll]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1319,10 +1113,10 @@ BEGIN
     SELECT *
     FROM Customer_Type
 	where is_deleted = 0
-    ORDER BY ct_id DESC;
+    ORDER BY ct_id asc;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Customer_Type_GetById]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Customer_Type_GetById]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1343,7 +1137,7 @@ BEGIN
     WHERE ct_id = @ct_id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Customer_Type_Insert]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Customer_Type_Insert]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1381,7 +1175,7 @@ BEGIN
     SELECT SCOPE_IDENTITY();
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Customer_Type_Toggle]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Customer_Type_Toggle]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1416,7 +1210,7 @@ BEGIN
     SELECT @@ROWCOUNT AS RowsAffected;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Customer_Type_Update]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Customer_Type_Update]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1449,7 +1243,7 @@ BEGIN
     SELECT @@ROWCOUNT AS RowsAffected;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Customer_Update]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Customer_Update]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1498,7 +1292,7 @@ BEGIN
     SELECT @@ROWCOUNT AS RowsAffected;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_GetRefreshToken]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_GetRefreshToken]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1512,302 +1306,30 @@ BEGIN
     WHERE Token = @Token
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Invoice_Create]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_License_Mode_Delete]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[sp_Invoice_Create]
+
+
+
+CREATE PROCEDURE [dbo].[sp_License_Mode_Delete]
 (
-    @invoice_no varchar(50),
-    @invoice_date date,
-    @invoice_type_code varchar(10),
-    @invoice_curreny_code varchar(5),
-    @invoice_tsn_code varchar(10),
-    @due_date date,
-    @bsn_process_type varchar(10),
-    @specification_identifier varchar(50),
-    @payment_means_type_code nchar(10),
-    @net_amt decimal(18,6),
-    @total_wo_tax decimal(18,6),
-    @total_tax_amt decimal(18,6),
-    @total_w_tax decimal(18,6),
-    @payment_due_amt decimal(18,6),
-    @tax_cat_taxable_amt decimal(18,6),
-    @tax_cat_tax_amt decimal(18,6),
-    @tax_cat_code varchar(10),
-    @tax_cat_rate decimal(18,6),
-	@address_line varchar(MAX),
-	@bp_id int,
-	@created_by int,
-    @created_on datetime,
-    @Lines dbo.InvoiceLineType READONLY
+    @id int
 )
 AS
 BEGIN
     SET NOCOUNT ON;
-
-    BEGIN TRAN;
-
-    INSERT INTO Invoice_Header
-    (
-        invoice_no, invoice_date, invoice_type_code, invoice_curreny_code,
-        invoice_tsn_code, due_date, bsn_process_type, specification_identifier,
-        payment_means_type_code, net_amt, total_wo_tax, total_tax_amt,
-        total_w_tax, payment_due_amt, tax_cat_taxable_amt,
-        tax_cat_tax_amt, tax_cat_code, tax_cat_rate,bp_Id,addressline,created_by,created_on
-    )
-    VALUES
-    (
-        @invoice_no, @invoice_date, @invoice_type_code, @invoice_curreny_code,
-        @invoice_tsn_code, @due_date, @bsn_process_type, @specification_identifier,
-        @payment_means_type_code, @net_amt, @total_wo_tax, @total_tax_amt,
-        @total_w_tax, @payment_due_amt, @tax_cat_taxable_amt,
-        @tax_cat_tax_amt, @tax_cat_code, @tax_cat_rate,@bp_id,@address_line,@created_by,@created_on
-    );
-
-    DECLARE @InvoiceId INT = SCOPE_IDENTITY();
-
-	;WITH LineCTE AS
-(
-    SELECT *,
-           ROW_NUMBER() OVER (ORDER BY (SELECT 1)) AS RowNum
-    FROM @Lines
-)
-INSERT INTO Invoice_Line
-(
-    invoice_id,
-    line_no,
-    item_name,
-    description,
-    inv_line_identifier,
-    unit_of_measure_code,
-    net_amt,
-    item_net_price,
-    item_gross_price,
-    item_price_base_qty,
-    item_tax_cat_code,
-    item_tax_rate,
-    vat_in_aed,
-    amt_in_aed
-)
-SELECT
-    @InvoiceId,
-    RowNum,
-    item_name,
-    description,
-    inv_line_identifier,
-    unit_of_measure_code,
-    net_amt,
-    item_net_price,
-    item_gross_price,
-    item_price_base_qty,
-    item_tax_cat_code,
-    item_tax_rate,
-    vat_in_aed,
-    amt_in_aed
-FROM LineCTE;
-    COMMIT;
-
-    SELECT @InvoiceId AS invoice_id;
-END
-GO
-/****** Object:  StoredProcedure [dbo].[sp_Invoice_Delete]    Script Date: 27-03-2026 11:38:02 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[sp_Invoice_Delete]
-(
-    @invoice_id INT
-)
-AS
-BEGIN
-    BEGIN TRAN;
-
-    DELETE FROM Invoice_Line
-    WHERE invoice_id = @invoice_id;
-
-    Update  Invoice_Header Set is_deleted=1
-    WHERE invoice_id = @invoice_id;
-
-    COMMIT;
-END
-GO
-/****** Object:  StoredProcedure [dbo].[sp_Invoice_GetAll]    Script Date: 27-03-2026 11:38:02 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[sp_Invoice_GetAll]
-AS
-BEGIN
- SELECT [invoice_Id]
-      ,[invoice_no]
-      ,[invoice_date]
-      ,[due_date]
-      ,[total_w_tax] as total,'Pending' as status
-	  ,b.name as partner
-  FROM [BasicDb].[dbo].[Invoice_Header] i join BussinessPartner b on b.bp_id=i.bp_Id where i.is_deleted=0
-END
-GO
-/****** Object:  StoredProcedure [dbo].[sp_Invoice_GetById]    Script Date: 27-03-2026 11:38:02 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[sp_Invoice_GetById]
-(
-    @invoice_id INT
-)
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    SELECT * 
-    FROM Invoice_Header
-    WHERE invoice_Id = @invoice_id;
-
-    SELECT *
-    FROM Invoice_Line
-    WHERE invoice_id = @invoice_id;
-END
-GO
-/****** Object:  StoredProcedure [dbo].[sp_Invoice_Update]    Script Date: 27-03-2026 11:38:02 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[sp_Invoice_Update]
-(
-    @invoice_id INT,
-
-    @invoice_no varchar(50),
-    @invoice_date date,
-    @invoice_type_code varchar(10),
-    @invoice_curreny_code varchar(5),
-    @invoice_tsn_code varchar(10),
-    @due_date date,
-    @bsn_process_type varchar(10),
-    @specification_identifier varchar(50),
-    @payment_means_type_code nchar(10),
-    @net_amt decimal(18,6),
-    @total_wo_tax decimal(18,6),
-    @total_tax_amt decimal(18,6),
-    @total_w_tax decimal(18,6),
-    @payment_due_amt decimal(18,6),
-    @tax_cat_taxable_amt decimal(18,6),
-    @tax_cat_tax_amt decimal(18,6),
-    @tax_cat_code varchar(10),
-    @tax_cat_rate decimal(18,6),
-	@address_line varchar(MAX),
-	@bp_id int,
-	@updated_by int,
-    @updated_on datetime,
-    @Lines dbo.InvoiceLineType READONLY
-)
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    BEGIN TRAN;
-
-    UPDATE Invoice_Header
-    SET
-        invoice_no = @invoice_no,
-        invoice_date = @invoice_date,
-        invoice_type_code = @invoice_type_code,
-        invoice_curreny_code = @invoice_curreny_code,
-        invoice_tsn_code = @invoice_tsn_code,
-        due_date = @due_date,
-        bsn_process_type = @bsn_process_type,
-        specification_identifier = @specification_identifier,
-        payment_means_type_code = @payment_means_type_code,
-        net_amt = @net_amt,
-        total_wo_tax = @total_wo_tax,
-        total_tax_amt = @total_tax_amt,
-        total_w_tax = @total_w_tax,
-        payment_due_amt = @payment_due_amt,
-        tax_cat_taxable_amt = @tax_cat_taxable_amt,
-        tax_cat_tax_amt = @tax_cat_tax_amt,
-        tax_cat_code = @tax_cat_code,
-        tax_cat_rate = @tax_cat_rate,
-		bp_Id=@bp_id,
-		addressline=@address_line,
-		updated_by =@updated_by,
-		updated_on =@updated_on
-    WHERE invoice_Id = @invoice_id;
-
-    DELETE FROM Invoice_Line
-    WHERE invoice_id = @invoice_id;
-
-    
-    ;WITH LineCTE AS
-(
-    SELECT *,
-           ROW_NUMBER() OVER (ORDER BY (SELECT 1)) AS RowNum
-    FROM @Lines
-)
-INSERT INTO Invoice_Line
-(
-    invoice_id,
-    line_no,
-    item_name,
-    description,
-    inv_line_identifier,
-    unit_of_measure_code,
-    net_amt,
-    item_net_price,
-    item_gross_price,
-    item_price_base_qty,
-    item_tax_cat_code,
-    item_tax_rate,
-    vat_in_aed,
-    amt_in_aed
-)
-SELECT
-   @invoice_id,
-    RowNum,
-    item_name,
-    description,
-    inv_line_identifier,
-    unit_of_measure_code,
-    net_amt,
-    item_net_price,
-    item_gross_price,
-    item_price_base_qty,
-    item_tax_cat_code,
-    item_tax_rate,
-    vat_in_aed,
-    amt_in_aed
-FROM LineCTE;
-    COMMIT;
-END
-GO
-/****** Object:  StoredProcedure [dbo].[sp_Module_Delete]    Script Date: 27-03-2026 11:38:02 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-
-CREATE PROCEDURE [dbo].[sp_Module_Delete]
-(
-    @module_id int
-)
-AS
-BEGIN
-    SET NOCOUNT ON;
-	UPDATE Module
+	UPDATE License_Mode
     SET 
         is_deleted = 1
-    WHERE module_id = @module_id;
+    WHERE lm_id = @id;
 
     SELECT @@ROWCOUNT AS RowsAffected;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Module_GetAll]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_License_Mode_GetAll]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1815,61 +1337,18 @@ GO
 
 
 
-CREATE PROCEDURE [dbo].[sp_Module_GetAll]
+CREATE PROCEDURE [dbo].[sp_License_Mode_GetAll]
 AS
 BEGIN
     SET NOCOUNT ON;
 
     SELECT *
-    FROM Module
+    FROM License_Mode
 	where is_deleted = 0
-    ORDER BY module_id DESC;
+    ORDER BY lm_id asc;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Module_GetById]    Script Date: 27-03-2026 11:38:02 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-
-CREATE PROCEDURE [dbo].[sp_Module_GetById]
-(
-    @module_id int
-)
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    SELECT *
-    FROM Module
-    WHERE module_id = @module_id;
-END
-GO
-/****** Object:  StoredProcedure [dbo].[sp_Module_GetByProductId]    Script Date: 27-03-2026 11:38:02 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-
-
-CREATE PROCEDURE [dbo].[sp_Module_GetByProductId]
-(
-    @pd_id int
-)
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    SELECT *
-    FROM Module
-    WHERE product_id = @pd_id and is_deleted=0;
-END
-GO
-/****** Object:  StoredProcedure [dbo].[sp_Module_Insert]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_License_Mode_Insert]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1879,21 +1358,19 @@ GO
 
 
 
-CREATE PROCEDURE [dbo].[sp_Module_Insert]
+CREATE PROCEDURE [dbo].[sp_License_Mode_Insert]
     @Code VARCHAR(10),
 	@Name VARCHAR(30),
 	@Description VARCHAR(500),
-	@Product_Id int,
     @CreatedBy int,
     @CreatedOn Datetime
 AS
 BEGIN
-    INSERT INTO Module
+    INSERT INTO License_Mode
     (
         code
       ,name
       ,description
-	  ,product_id
       ,created_by
       ,created_on
     )
@@ -1902,7 +1379,6 @@ BEGIN
         @Code,
 		@Name,
 		@Description,
-		@Product_Id,
         @CreatedBy,
         @CreatedOn
     );
@@ -1910,7 +1386,7 @@ BEGIN
     SELECT SCOPE_IDENTITY();
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Module_Toggle]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_License_Mode_Toggle]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1919,9 +1395,11 @@ GO
 
 
 
-CREATE PROCEDURE [dbo].[sp_Module_Toggle]
+
+
+CREATE PROCEDURE [dbo].[sp_License_Mode_Toggle]
 (
-    @module_id int
+    @id int
 )
 AS
 BEGIN
@@ -1930,20 +1408,20 @@ BEGIN
     DECLARE @status BIT;
 
     SELECT @status = is_active
-    FROM Module
-    WHERE module_id = @module_id;
+    FROM License_Mode
+    WHERE lm_id = @id;
 
-    UPDATE Module
+    UPDATE License_Mode
     SET is_active = CASE 
                         WHEN @status = 1 THEN 0
                         ELSE 1
                     END
-    WHERE module_id = @module_id;
+    WHERE lm_id = @id;
 
     SELECT @@ROWCOUNT AS RowsAffected;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Module_Update]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_License_Mode_Update]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1951,13 +1429,12 @@ GO
 
 
 
-CREATE PROCEDURE [dbo].[sp_Module_Update]
+CREATE PROCEDURE [dbo].[sp_License_Mode_Update]
 (
-    @module_id int,
+    @lm_id int,
     @Code VARCHAR(10),
 	@Name VARCHAR(30),
 	@Description VARCHAR(500),
-	@Product_Id int,
 	@UpdatedBy INT,
 	@UpdatedOn Datetime
 )
@@ -1965,77 +1442,61 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    UPDATE Module
+    UPDATE License_Mode
     SET
         name = @name,
         code = @Code,
-		product_id=@Product_Id,
         description = @Description,
 		updated_by=@UpdatedBy,
 		updated_on=@UpdatedOn
-    WHERE module_id = @module_id;
+    WHERE lm_id = @lm_id;
 
     SELECT @@ROWCOUNT AS RowsAffected;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Product_Delete]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_License_Type_Delete]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE [dbo].[sp_Product_Delete]
+
+
+CREATE PROCEDURE [dbo].[sp_License_Type_Delete]
 (
-    @prod_id int
+    @id int
 )
 AS
 BEGIN
     SET NOCOUNT ON;
-	UPDATE Product
+	UPDATE License_Type
     SET 
         is_deleted = 1
-    WHERE prod_Id = @prod_id;
+    WHERE lt_id = @id;
 
     SELECT @@ROWCOUNT AS RowsAffected;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Product_GetAll]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_License_Type_GetAll]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE PROCEDURE [dbo].[sp_Product_GetAll]
+
+
+CREATE PROCEDURE [dbo].[sp_License_Type_GetAll]
 AS
 BEGIN
     SET NOCOUNT ON;
 
     SELECT *
-    FROM Product
+    FROM License_Type
 	where is_deleted = 0
-    ORDER BY prod_id DESC;
+    ORDER BY lt_id asc;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Product_GetById]    Script Date: 27-03-2026 11:38:02 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE PROCEDURE [dbo].[sp_Product_GetById]
-(
-    @prod_id int
-)
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    SELECT *
-    FROM Product
-    WHERE prod_Id = @prod_id;
-END
-GO
-/****** Object:  StoredProcedure [dbo].[sp_Product_Insert]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_License_Type_Insert]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2043,25 +1504,21 @@ GO
 
 
 
-CREATE PROCEDURE [dbo].[sp_Product_Insert]
+
+
+CREATE PROCEDURE [dbo].[sp_License_Type_Insert]
     @Code VARCHAR(10),
 	@Name VARCHAR(30),
 	@Description VARCHAR(500),
-	@Uom_Id INT,
-    @Unit_Price decimal(18,3),
-    @Tax_rate decimal(18,3),
     @CreatedBy int,
     @CreatedOn Datetime
 AS
 BEGIN
-    INSERT INTO Product
+    INSERT INTO License_Type
     (
         code
       ,name
       ,description
-      ,uom_id
-      ,unit_price
-      ,tax_rate
       ,created_by
       ,created_on
     )
@@ -2070,9 +1527,6 @@ BEGIN
         @Code,
 		@Name,
 		@Description,
-		@Uom_Id,
-        @Unit_Price,
-        @Tax_rate,
         @CreatedBy,
         @CreatedOn
     );
@@ -2080,34 +1534,376 @@ BEGIN
     SELECT SCOPE_IDENTITY();
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Product_Search]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_License_Type_Toggle]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[sp_Product_Search]
-    @SearchTerm NVARCHAR(100)
+
+
+
+
+
+
+CREATE PROCEDURE [dbo].[sp_License_Type_Toggle]
+(
+    @id int
+)
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    SELECT TOP 20
-        prod_Id,
-        code,
-        Name,
-        Description,
-        unit_price,
-        tax_rate
-    FROM Product
-    WHERE is_deleted = 0
-      AND (
-            code LIKE '%' + @SearchTerm + '%'
-            OR Name LIKE '%' + @SearchTerm + '%'
-          )
-    ORDER BY Name ASC
+    DECLARE @status BIT;
+
+    SELECT @status = is_active
+    FROM License_Type
+    WHERE lt_id = @id;
+
+    UPDATE License_Type
+    SET is_active = CASE 
+                        WHEN @status = 1 THEN 0
+                        ELSE 1
+                    END
+    WHERE lt_id = @id;
+
+    SELECT @@ROWCOUNT AS RowsAffected;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Product_Toggle]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_License_Type_Update]    Script Date: 30-03-2026 16:38:12 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+CREATE PROCEDURE [dbo].[sp_License_Type_Update]
+(
+    @lt_id int,
+    @Code VARCHAR(10),
+	@Name VARCHAR(30),
+	@Description VARCHAR(500),
+	@UpdatedBy INT,
+	@UpdatedOn Datetime
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE License_Type
+    SET
+        name = @name,
+        code = @Code,
+        description = @Description,
+		updated_by=@UpdatedBy,
+		updated_on=@UpdatedOn
+    WHERE lt_id = @lt_id;
+
+    SELECT @@ROWCOUNT AS RowsAffected;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[sp_PriceList_Delete]    Script Date: 30-03-2026 16:38:12 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[sp_PriceList_Delete]
+(
+    @id int
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+	UPDATE PriceList
+    SET 
+        is_deleted = 1
+    WHERE pl_id = @id;
+
+    SELECT @@ROWCOUNT AS RowsAffected;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[sp_PriceList_Filtered]    Script Date: 30-03-2026 16:38:12 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE PROCEDURE [dbo].[sp_PriceList_Filtered]
+(
+    @pd_id int,
+	@customer_id int,
+	@st_id int,
+	@module_id int
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT *
+    FROM Custom_Price
+    WHERE custom_prod_id = @customer_id and pd_id=@pd_id and st_id=@st_id and module_id=@module_id and is_deleted=0;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[sp_PriceList_GetAll]    Script Date: 30-03-2026 16:38:12 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[sp_PriceList_GetAll]
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT p.pl_id, p.[st_id]
+      ,p.[cat_id]
+      ,p.[pd_id]
+      ,p.[lt_id]
+      ,p.[lm_id]
+      ,p.[unit_rate]
+      ,p.[alf_rate]
+      ,p.[effective_from]
+      ,p.[effective_to]
+	  ,p.is_active
+	,s.Name as ServiceType,c.Name as Category, l.Name as Product, t.name as LicenseType,m.name as LicenseMode
+    FROM PriceList p
+	join Service_Type s on s.st_id=p.st_id
+	join Category c on c.cat_Id=p.cat_id
+	join Products l on l.pd_Id=p.pd_id
+	left join License_Type t on t.lt_id=p.lt_id
+	left join License_Mode m on m.lm_id=p.lm_id
+	where p.is_deleted = 0
+    ORDER BY p.pl_id DESC;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[sp_PriceList_Insert]    Script Date: 30-03-2026 16:38:12 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[sp_PriceList_Insert]
+(
+	@st_id int,
+	@cat_id int,
+	@pd_id int,
+	@lt_id int,
+	@lm_id int,
+	@unit_rate decimal(18,3),
+	@alf_rate decimal(18,3),
+	@effective_from Datetime,
+	@effective_to Datetime,
+	@CreatedBy int,
+    @CreatedOn Datetime
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO PriceList
+    (	st_id,
+		cat_id,
+		pd_id,
+        lt_id,
+        lm_id,
+        unit_rate,
+        alf_rate,
+		effective_from,
+		effective_to,
+		created_by,
+		created_on
+    )
+    VALUES
+    (	@st_id,
+		@cat_id,
+		@pd_id,
+        @lt_id,
+        @lm_id,
+        @unit_rate,
+        @alf_rate,
+		@effective_from,
+		@effective_to,
+		@CreatedBy,
+		@CreatedOn
+    );
+
+    SELECT SCOPE_IDENTITY() AS pl_id;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[sp_PriceList_Toggle]    Script Date: 30-03-2026 16:38:12 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+
+
+
+
+CREATE PROCEDURE [dbo].[sp_PriceList_Toggle]
+(
+    @id int
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @status BIT;
+
+    SELECT @status = is_active
+    FROM PriceList
+     WHERE pl_id = @id;
+
+    UPDATE PriceList
+    SET is_active = CASE 
+                        WHEN @status = 1 THEN 0
+                        ELSE 1
+                    END
+     WHERE pl_id = @id;
+
+    SELECT @@ROWCOUNT AS RowsAffected;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[sp_PriceList_Update]    Script Date: 30-03-2026 16:38:12 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[sp_PriceList_Update]
+(	@pl_id int,
+	@st_id int,
+	@cat_id int,
+	@pd_id int,
+	@lt_id int,
+	@lm_id int,
+	@unit_rate decimal(18,3),
+	@alf_rate decimal(18,3),
+	@effective_from Datetime,
+	@effective_to Datetime,
+	@UpdatedBy INT,
+	@UpdatedOn Datetime
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE PriceList
+    SET
+       st_id=@st_id,
+	   cat_id=@cat_id,
+	   pd_id=@pd_id,
+	   lt_id=@lt_id,
+	   lm_id=@lm_id,
+	   unit_rate=@unit_rate,
+	   alf_rate=@alf_rate,
+	   effective_from=@effective_from,
+	  effective_to=@effective_to,
+	   updated_by=@UpdatedBy,
+		updated_on=@UpdatedOn
+    WHERE pl_id = @pl_id;
+
+    SELECT @@ROWCOUNT AS RowsAffected;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[sp_Product_Delete]    Script Date: 30-03-2026 16:38:12 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+
+CREATE PROCEDURE [dbo].[sp_Product_Delete]
+(
+    @id int
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+	UPDATE Products
+    SET 
+        is_deleted = 1
+    WHERE pd_id = @id;
+
+    SELECT @@ROWCOUNT AS RowsAffected;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[sp_Product_GetAll]    Script Date: 30-03-2026 16:38:12 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+
+CREATE PROCEDURE [dbo].[sp_Product_GetAll]
+(
+    @id int
+)
+AS
+BEGIN
+    SET NOCOUNT ON;
+	if(@id=0)
+    SELECT *
+    FROM Products
+	where is_deleted = 0
+    ORDER BY pd_id asc;
+	else
+	SELECT *
+    FROM Products
+	where is_deleted = 0 and cat_id=@id
+    ORDER BY pd_id asc;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[sp_Product_Insert]    Script Date: 30-03-2026 16:38:12 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+
+
+
+
+CREATE PROCEDURE [dbo].[sp_Product_Insert]
+    @Code VARCHAR(10),
+	@Name VARCHAR(50),
+	@Description VARCHAR(500),
+	@Cat_Id int,
+    @CreatedBy int,
+    @CreatedOn Datetime
+AS
+BEGIN
+    INSERT INTO Products
+    (
+        code
+      ,name
+      ,description
+	  ,cat_id
+      ,created_by
+      ,created_on
+    )
+    VALUES
+    (
+        @Code,
+		@Name,
+		@Description,
+		@Cat_Id,
+        @CreatedBy,
+        @CreatedOn
+    );
+    SELECT SCOPE_IDENTITY();
+END
+GO
+/****** Object:  StoredProcedure [dbo].[sp_Product_Toggle]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2119,7 +1915,7 @@ GO
 
 CREATE PROCEDURE [dbo].[sp_Product_Toggle]
 (
-    @prod_Id int
+    @id int
 )
 AS
 BEGIN
@@ -2128,34 +1924,35 @@ BEGIN
     DECLARE @status BIT;
 
     SELECT @status = is_active
-    FROM Product
-    WHERE prod_Id = @prod_Id;
+    FROM Products
+    WHERE pd_id = @id;
 
-    UPDATE Product
+    UPDATE Products
     SET is_active = CASE 
                         WHEN @status = 1 THEN 0
                         ELSE 1
                     END
-    WHERE prod_Id = @prod_Id;
+    WHERE pd_id = @id;
 
     SELECT @@ROWCOUNT AS RowsAffected;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Product_Update]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Product_Update]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+
+
+
 CREATE PROCEDURE [dbo].[sp_Product_Update]
 (
-    @prod_id int,
+    @pd_id int,
     @Code VARCHAR(10),
-	@Name VARCHAR(30),
+	@Name VARCHAR(50),
 	@Description VARCHAR(500),
-	@Uom_Id VARCHAR(10),
-    @Unit_Price decimal(18,3),
-    @Tax_rate decimal(18,3),
+	@cat_Id int,
 	@UpdatedBy INT,
 	@UpdatedOn Datetime
 )
@@ -2163,22 +1960,20 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    UPDATE Product
+    UPDATE Products
     SET
         name = @name,
         code = @Code,
+		cat_id=@cat_Id,
         description = @Description,
-        uom_id = @Uom_Id,
-        unit_price = @Unit_Price,
-        tax_rate = @Tax_rate,
 		updated_by=@UpdatedBy,
 		updated_on=@UpdatedOn
-    WHERE prod_Id = @prod_id;
+    WHERE pd_id = @pd_id;
 
     SELECT @@ROWCOUNT AS RowsAffected;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Quote_Attachments_Save]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Quote_Attachments_Save]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2242,7 +2037,7 @@ BEGIN
     END CATCH
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Quote_Create]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Quote_Create]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2324,7 +2119,7 @@ FROM LineCTE;
     SELECT @QuoteId AS q_id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Quote_Delete]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Quote_Delete]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2347,7 +2142,7 @@ BEGIN
     COMMIT;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Quote_GetAll]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Quote_GetAll]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2368,7 +2163,7 @@ BEGIN
   FROM [BasicDb].[dbo].[Quote_Header] i join Customer b on b.customer_id=i.customer_id where i.is_deleted=0
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Quote_GetById]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Quote_GetById]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2400,7 +2195,7 @@ BEGIN
     WHERE q_Id = @q_id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Quote_GetViewById]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Quote_GetViewById]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2446,7 +2241,7 @@ BEGIN
     WHERE q_Id = @q_id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Quote_Update]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Quote_Update]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2525,7 +2320,7 @@ FROM LineCTE;
     COMMIT;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_RevokeRefreshToken]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_RevokeRefreshToken]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2539,7 +2334,7 @@ BEGIN
     WHERE Token = @Token
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Role_Create]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Role_Create]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2568,7 +2363,7 @@ BEGIN
     SELECT @RoleId AS RoleId;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Role_Delete]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Role_Delete]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2581,7 +2376,7 @@ BEGIN
     DELETE FROM Roles WHERE role_id = @Id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Role_GetAll]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Role_GetAll]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2600,7 +2395,7 @@ BEGIN
     ORDER BY r.role_id;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Role_Toggle]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Role_Toggle]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2635,7 +2430,7 @@ BEGIN
     SELECT @@ROWCOUNT AS RowsAffected;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Role_Update]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Role_Update]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2665,7 +2460,7 @@ BEGIN
     FROM @PermissionIds;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_SaveRefreshToken]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_SaveRefreshToken]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2680,7 +2475,7 @@ BEGIN
     VALUES (@UserId, @Token, @Expiry)
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_SeedPermissions]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_SeedPermissions]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2763,7 +2558,7 @@ BEGIN
     DEALLOCATE menu_cursor;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Service_Type_Delete]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Service_Type_Delete]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2785,7 +2580,7 @@ BEGIN
     SELECT @@ROWCOUNT AS RowsAffected;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Service_Type_GetAll]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Service_Type_GetAll]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2803,27 +2598,7 @@ BEGIN
     ORDER BY st_id asc;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Service_Type_GetById]    Script Date: 27-03-2026 11:38:02 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
-
-CREATE PROCEDURE [dbo].[sp_Service_Type_GetById]
-(
-    @st_id int
-)
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    SELECT *
-    FROM Service_Type
-    WHERE st_id = @st_id;
-END
-GO
-/****** Object:  StoredProcedure [dbo].[sp_Service_Type_Insert]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Service_Type_Insert]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2860,7 +2635,7 @@ BEGIN
     SELECT SCOPE_IDENTITY();
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Service_Type_Toggle]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Service_Type_Toggle]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2894,7 +2669,7 @@ BEGIN
     SELECT @@ROWCOUNT AS RowsAffected;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_Service_Type_Update]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_Service_Type_Update]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2926,7 +2701,7 @@ BEGIN
     SELECT @@ROWCOUNT AS RowsAffected;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_UOM_GetAll]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_UOM_GetAll]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2942,7 +2717,7 @@ BEGIN
     ORDER BY uom_id asc;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_User_Create]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_User_Create]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2986,7 +2761,7 @@ BEGIN
     SELECT SCOPE_IDENTITY();
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_User_Delete]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_User_Delete]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3001,7 +2776,7 @@ BEGIN
     WHERE user_id = @Id
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_User_GetAll]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_User_GetAll]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3015,7 +2790,7 @@ BEGIN
 	where u.is_deleted=0 and u.role_id !=1
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_User_Toggle]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_User_Toggle]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3051,7 +2826,7 @@ BEGIN
     SELECT @@ROWCOUNT AS RowsAffected;
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_User_Update]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_User_Update]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3092,7 +2867,7 @@ else
 
 END
 GO
-/****** Object:  StoredProcedure [dbo].[sp_UserPassword_Update]    Script Date: 27-03-2026 11:38:02 ******/
+/****** Object:  StoredProcedure [dbo].[sp_UserPassword_Update]    Script Date: 30-03-2026 16:38:12 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -3113,4 +2888,8 @@ BEGIN
     WHERE user_id = @Id
 
 END
+GO
+USE [master]
+GO
+ALTER DATABASE [BasicDb] SET  READ_WRITE 
 GO
