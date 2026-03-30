@@ -8,7 +8,7 @@ namespace Core.Entities
 {
     public class Category:Base_Entity
     {
-        public int Cat_Id { get; set; }
+        public int? Cat_Id { get; set; }
         public string Code { get; set; }=string.Empty;
         public string Name { get; set; } = string.Empty;
         public string? Description { get; set; } = string.Empty;

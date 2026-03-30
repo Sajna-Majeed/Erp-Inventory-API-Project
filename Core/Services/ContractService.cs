@@ -23,14 +23,7 @@ namespace Core.Services
 
 
        
-        public async Task<IEnumerable<Product>> GetCategory()
-        {
-            string sql = "select [pd_Id],[code],[name],[st_Id] from Product";
-            return await _uow.Repository.QueryAsync<Product>(sql,
-            null,
-            CommandType.Text);
-
-        }
+      
         public async Task<IEnumerable<ProductDto>> GetProduct(int id)
         {
             string sql = "select [lt_id] as Id,[code],[name] FROM [ALF_License_Type] where pd_id=@id";
