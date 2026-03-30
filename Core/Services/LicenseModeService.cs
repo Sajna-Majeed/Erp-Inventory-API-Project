@@ -11,11 +11,11 @@ namespace Core.Services
 {
   
 
-    public class LicenseTypeService : ILicenseTypeService
+    public class LicenseModeService : ILicenseModeService
     {
         private readonly IUnitOfWork _uow;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public LicenseTypeService(IUnitOfWork uow,IHttpContextAccessor httpContextAccessor)
+        public LicenseModeService(IUnitOfWork uow,IHttpContextAccessor httpContextAccessor)
         {
             _uow = uow;
             _httpContextAccessor = httpContextAccessor;
@@ -25,9 +25,9 @@ namespace Core.Services
 
         public async Task<bool> CheckNameExists(string name, int id)
         {
-            var sql = "SELECT  *  FROM [License_Type] where name=@name and lt_id!=@id and is_deleted=0";
+            var sql = "SELECT  *  FROM [License_Mode] where name=@name and lm_id!=@id and is_deleted=0";
 
-            var lastCode = await _uow.Repository.QuerySingleAsync<LicenseType>(sql, new
+            var lastCode = await _uow.Repository.QuerySingleAsync<LicenseMode>(sql, new
             {
                 name,
                 id
@@ -37,25 +37,25 @@ namespace Core.Services
         }
         public async Task<string> GenerateCodeAsync()
         {
-            var sql = "SELECT TOP (1)  *  FROM [License_Type] order by lt_id desc";
+            var sql = "SELECT TOP (1)  *  FROM [License_Mode] order by lm_id desc";
             
-            var lastCode = await _uow.Repository.QuerySingleAsync<LicenseType>(sql,null,CommandType.Text);
+            var lastCode = await _uow.Repository.QuerySingleAsync<LicenseMode>(sql,null,CommandType.Text);
             
-            int nextNumber = lastCode == null
+            int nextNumber = lastCode != null
                 ? 1
                 : int.Parse(lastCode.Code.Split('-').Last()) + 1;
 
-            return $"LT-{nextNumber:D3}";
+            return $"LM-{nextNumber:D3}";
         }
 
 
 
-        public async Task<int> CreateLicenseTypeAsync(LicenseType dto)
+        public async Task<int> CreateLicenseModeAsync(LicenseMode dto)
         {
            var userId = _httpContextAccessor.HttpContext?.Items["UserId"] as int?;
         
             var result= await _uow.Repository.ExecuteAsync(
-                "sp_License_Type_Insert",
+                "sp_License_Mode_Insert",
                 new
                 {
                     dto.Code,
@@ -66,18 +66,18 @@ namespace Core.Services
                 });
             _uow.Commit();
             var user = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
-            Log.Information("User {User} created a new license type with id {Id}", user, result);
+            Log.Information("User {User} created a new license Mode with id {Id}", user, result);
             return result;
         }
-        public async Task UpdateLicenseTypeAsync(LicenseType dto)
+        public async Task UpdateLicenseModeAsync(LicenseMode dto)
         {
             var userId = _httpContextAccessor.HttpContext?.Items["UserId"] as int?;
 
             await _uow.Repository.ExecuteAsync(
-                "sp_License_Type_Update",
+                "sp_License_Mode_Update",
                 new
                 {
-                    dto.Lt_Id,
+                    dto.Lm_Id,
                     dto.Code,
                     dto.Name,
                     dto.Description,
@@ -87,13 +87,13 @@ namespace Core.Services
 
             _uow.Commit();
             var user = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
-            Log.Information("User {User} updated a license type with id {Id}", user, dto.Lt_Id);
+            Log.Information("User {User} updated a license Mode with id {Id}", user, dto.Lm_Id);
         }
 
-        public async Task DeleteLicenseTypeAsync(int id)
+        public async Task DeleteLicenseModeAsync(int id)
         {
             await _uow.Repository.ExecuteAsync(
-                "sp_License_Type_Delete",
+                "sp_License_Mode_Delete",
                 new
                 {
                    id = id
@@ -101,13 +101,13 @@ namespace Core.Services
 
             _uow.Commit();
             var user = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
-            Log.Information("User {User} deleted a license type with id {Id}", user, id);
+            Log.Information("User {User} deleted a license Mode with id {Id}", user, id);
         }
 
         public async Task ToggleStatusAsync(int id)
         {
             await _uow.Repository.ExecuteAsync(
-                "sp_License_Type_Toggle",
+                "sp_License_Mode_Toggle",
                 new
                 {
                     id = id
@@ -115,12 +115,12 @@ namespace Core.Services
 
             _uow.Commit();
             var user = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
-            Log.Information("User {User} updated a license type status with id {Id}", user, id);
+            Log.Information("User {User} updated a license Mode status with id {Id}", user, id);
         }
-        public async Task<IEnumerable<LicenseType>> GetLicenseTypeAsync()
+        public async Task<IEnumerable<LicenseMode>> GetLicenseModeAsync()
         {
-            return await _uow.Repository.QueryAsync<LicenseType>(
-                "sp_License_Type_GetAll");
+            return await _uow.Repository.QueryAsync<LicenseMode>(
+                "sp_License_Mode_GetAll");
         }
         
     }

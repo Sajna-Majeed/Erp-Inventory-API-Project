@@ -11,11 +11,11 @@ namespace Core.Services
 {
   
 
-    public class ModuleService : IModuleService
+    public class ProductService : IProducteService
     {
         private readonly IUnitOfWork _uow;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public ModuleService(IUnitOfWork uow,IHttpContextAccessor httpContextAccessor)
+        public ProductService(IUnitOfWork uow,IHttpContextAccessor httpContextAccessor)
         {
             _uow = uow;
             _httpContextAccessor = httpContextAccessor;
@@ -24,9 +24,9 @@ namespace Core.Services
 
         public async Task<bool> CheckNameExists(string name, int id)
         {
-            var sql = "SELECT  *  FROM [Module] where name=@name and module_id!=@id  and is_deleted=0";
+            var sql = "SELECT  *  FROM [Products] where name=@name and pd_id!=@id  and is_deleted=0";
 
-            var lastCode = await _uow.Repository.QuerySingleAsync<Module>(sql, new
+            var lastCode = await _uow.Repository.QuerySingleAsync<Product>(sql, new
             {
                 name,
                 id
@@ -35,117 +35,107 @@ namespace Core.Services
             return lastCode != null;
         }
 
-        public async Task<string> GenerateModuleCodeAsync()
+        public async Task<string> GenerateCodeAsync()
         {
-            var sql = "SELECT TOP (1)  *  FROM [Module] order by module_id desc";
+            var sql = "SELECT TOP (1)  *  FROM [Products] order by pd_id desc";
             
-            var lastCode = await _uow.Repository.QuerySingleAsync<Module>(sql,null,CommandType.Text);
+            var lastCode = await _uow.Repository.QuerySingleAsync<Product>(sql,null,CommandType.Text);
             
             int nextNumber = lastCode == null
                 ? 1
                 : int.Parse(lastCode.Code.Split('-').Last()) + 1;
 
-            return $"M-{nextNumber:D3}";
+            return $"PRD-{nextNumber:D3}";
         }
 
 
 
-        public async Task<int> CreateModuleAsync(CreateModuleDto dto)
+        public async Task<int> CreateProductAsync(Product dto)
         {
            var userId = _httpContextAccessor.HttpContext?.Items["UserId"] as int?;
         
             var result= await _uow.Repository.ExecuteAsync(
-                "sp_Module_Insert",
+                "sp_Product_Insert",
                 new
                 {
                     dto.Code,
                     dto.Name,
                     dto.Description,
-                    dto.Product_Id,
+                    dto.Cat_Id,
                     CreatedBy = userId??1,
                     CreatedOn=DateTime.UtcNow
                 });
             _uow.Commit();
             var user = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
-            Log.Information("User {User} created a new module with id {Id}", user, result);
+            Log.Information("User {User} created a new Product with id {Id}", user, result);
             return result;
         }
-        public async Task UpdateModuleAsync(UpdateModuleDto dto)
+        public async Task UpdateProductAsync(Product dto)
         {
             var userId = _httpContextAccessor.HttpContext?.Items["UserId"] as int?;
 
             await _uow.Repository.ExecuteAsync(
-                "sp_Module_Update",
+                "sp_Product_Update",
                 new
                 {
-                    dto.Module_Id,
+                    dto.Pd_Id,
                     dto.Code,
                     dto.Name,
                     dto.Description,
-                    dto.Product_Id,
+                    dto.Cat_Id,
                     UpdatedBy = userId??1,
                     UpdatedOn = DateTime.UtcNow
                 });
 
             _uow.Commit();
             var user = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
-            Log.Information("User {User} updated a module with id {Id}", user, dto.Module_Id);
+            Log.Information("User {User} updated a Product with id {Id}", user, dto.Pd_Id);
         }
 
-        public async Task DeleteModuleAsync(int id)
+        public async Task DeleteProductAsync(int id)
         {
             await _uow.Repository.ExecuteAsync(
-                "sp_Module_Delete",
+                "sp_Product_Delete",
                 new
                 {
-                    module_id = id
+                    id
                 });
 
             _uow.Commit();
             var user = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
-            Log.Information("User {User} deleted a module with id {Id}", user, id);
+            Log.Information("User {User} deleted a Product with id {Id}", user, id);
         }
         public async Task ToggleStatusAsync(int id)
         {
             await _uow.Repository.ExecuteAsync(
-                "sp_Module_Toggle",
+                "sp_Product_Toggle",
                 new
                 {
-                    module_id = id
+                    id
                 });
 
             _uow.Commit();
             var user = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
-            Log.Information("User {User} updated a module status with id {Id}", user, id);
+            Log.Information("User {User} updated a Product status with id {Id}", user, id);
         }
 
-        public async Task<IEnumerable<Module>> GetModuleAsync()
+        public async Task<IEnumerable<Product>> GetProductAsync()
         {
-            return await _uow.Repository.QueryAsync<Module>(
-                "sp_Module_GetAll");
+            return await _uow.Repository.QueryAsync<Product>(
+                "sp_Product_GetAll",
+                new
+                {
+                    id=0
+                });
         }
-
-        public async Task<IEnumerable<Module>> GetModuleByProductId(int id)
+        public async Task<IEnumerable<Product>> GetFilteredProductAsync(int id)
         {
-            return await _uow.Repository.QueryAsync<Module>("sp_Module_GetByProductId", new
-            {
-               pd_id = id
-            });
-        }
-        public async Task<Module> GetModuleByIdAsync(int id)
-        {
-            return await _uow.Repository.QuerySingleAsync<Module>("sp_Module_GetById", new
-            {
-                module_id = id
-            });
-        }
-
-        public async Task<IEnumerable<Module>> GetModuleBySearchAsync(string term)
-        {
-            return await _uow.Repository.QueryAsync<Module>("sp_Module_Search", new
-                  {
-                      SearchTerm= term
-                  });
+            return await _uow.Repository.QueryAsync<Product>(
+                "sp_Product_GetAll",
+                new
+                {
+                    id = id
+                });
         }
     }
 

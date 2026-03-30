@@ -44,12 +44,13 @@ namespace Infrastructure
             services.AddScoped<IQuoteService, QuoteService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IServiceTypeService, ServiceTypeService>();
-            services.AddScoped<IModuleService, ModuleService>();
             services.AddScoped<ICustomerTypeService, CustomerTypeService>();
             services.AddScoped<ICustomerService, CustomerService>();
-            services.AddScoped<ICustomPriceService, CustomPriceService>();
+            services.AddScoped<IPriceListService, PriceListService>();
             services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IProducteService, ProductService>();
             services.AddScoped<ILicenseTypeService, LicenseTypeService>();
+            services.AddScoped<ILicenseModeService, LicenseModeService>();
 
 
             return services;

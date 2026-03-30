@@ -124,7 +124,17 @@ namespace Core.Services
         public async Task<IEnumerable<Category>> GetCategoryAsync()
         {
             return await _uow.Repository.QueryAsync<Category>(
-                "sp_Category_GetAll");
+                "sp_Category_GetAll",
+                new
+                {
+                    id=0
+                });
+        }
+
+        public async Task<IEnumerable<Category>> GetCategoryFilteredAsync(int id)
+        {
+            return await _uow.Repository.QueryAsync<Category>(
+                "sp_Category_GetAll",new {id=id});
         }
 
     }

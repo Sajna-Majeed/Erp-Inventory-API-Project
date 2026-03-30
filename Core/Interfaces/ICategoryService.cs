@@ -11,5 +11,6 @@ namespace Core.Interfaces
         Task<IEnumerable<Category>> GetCategoryAsync();
         Task ToggleStatusAsync(int id);
         Task UpdateCategoryAsync(Category dto);
+        Task<IEnumerable<Category>> GetCategoryFilteredAsync(int id);
     }
 }

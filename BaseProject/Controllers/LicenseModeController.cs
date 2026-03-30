@@ -9,11 +9,11 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LicenseTypeController : ControllerBase
+    public class LicenseModeController : ControllerBase
     {
-        private readonly ILicenseTypeService _service;
+        private readonly ILicenseModeService _service;
 
-        public LicenseTypeController(ILicenseTypeService service)
+        public LicenseModeController(ILicenseModeService service)
         {
             _service = service;
         }
@@ -26,40 +26,40 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateServiceType(LicenseType dto)
+        public async Task<IActionResult> CreateServiceMode(LicenseMode dto)
         {
-            var id = await _service.CreateLicenseTypeAsync(dto);
+            var id = await _service.CreateLicenseModeAsync(dto);
             return Ok(ApiResponse<int>.Ok(id));
         }
 
 
         [HttpPut]
-        public async Task<IActionResult> UpdateServiceType(LicenseType dto)
+        public async Task<IActionResult> UpdateServiceMode(LicenseMode dto)
         {
-            await _service.UpdateLicenseTypeAsync(dto);
-            return Ok(ApiResponse<string>.Ok("LicenseType updated"));
+            await _service.UpdateLicenseModeAsync(dto);
+            return Ok(ApiResponse<string>.Ok("LicenseMode updated"));
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetServiceType()
+        public async Task<IActionResult> GetServiceMode()
         {
-            var serviceType = await _service.GetLicenseTypeAsync();
-            return Ok(ApiResponse<object>.Ok(serviceType));
+            var serviceMode = await _service.GetLicenseModeAsync();
+            return Ok(ApiResponse<object>.Ok(serviceMode));
         }
 
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteServiceType(int id)
+        public async Task<IActionResult> DeleteServiceMode(int id)
         {
-             await _service.DeleteLicenseTypeAsync(id);
-            return Ok(ApiResponse<object>.Ok("LicenseType Deleted"));
+             await _service.DeleteLicenseModeAsync(id);
+            return Ok(ApiResponse<object>.Ok("LicenseMode Deleted"));
         }
 
         [HttpDelete("Toggle/{id}")]
         public async Task<IActionResult> Togggle(int id)
         {
             await _service.ToggleStatusAsync(id);
-            return Ok(ApiResponse<string>.Ok("LicenseType status updated"));
+            return Ok(ApiResponse<string>.Ok("LicenseMode status updated"));
         }
 
         [HttpGet("Check")]

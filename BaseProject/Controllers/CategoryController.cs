@@ -47,6 +47,12 @@ namespace API.Controllers
             return Ok(ApiResponse<object>.Ok(Category));
         }
 
+        [HttpGet("filter/{id}")]
+        public async Task<IActionResult> GetCategoryBySt(int id)
+        {
+            var Category = await _service.GetCategoryFilteredAsync(id);
+            return Ok(ApiResponse<object>.Ok(Category));
+        }
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategory(int id)
         {

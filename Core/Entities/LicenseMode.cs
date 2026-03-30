@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Core.Entities
 {
-    public class LicenseType:Base_Entity
+    public class LicenseMode:Base_Entity
     {
-        public int? Lt_Id { get; set; }
+        public int? Lm_Id { get; set; }
         public string Code { get; set; }=string.Empty;
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
